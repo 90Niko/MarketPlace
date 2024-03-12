@@ -4,7 +4,7 @@ namespace MarketPlace
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
@@ -41,7 +41,7 @@ namespace MarketPlace
 
             app.MapRazorPages();
 
-            app.Run();
+            await app.RunAsync();
         }
     }
 }
