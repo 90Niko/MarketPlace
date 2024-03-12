@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace MarketPlace.Extensions.DependencyInjection
 {
-    public static class ServiceCollestionExtensions
+    public static class ServiceCollectionExtensions
     {
         public static IServiceCollection AddAplicationServices(this IServiceCollection services)
         {
