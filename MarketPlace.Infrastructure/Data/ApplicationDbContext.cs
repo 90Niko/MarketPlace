@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace MarketPlace.Data
+namespace MarketPlace.Infrastructure.Data
 {
     public class ApplicationDbContext : IdentityDbContext
     {
