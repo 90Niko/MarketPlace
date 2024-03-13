@@ -1,4 +1,7 @@
 using MarketPlace.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using MarketPlace.Infrastructure.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
