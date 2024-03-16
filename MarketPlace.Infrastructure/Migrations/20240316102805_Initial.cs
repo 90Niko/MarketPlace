@@ -49,6 +49,20 @@ namespace MarketPlace.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Categories",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false, comment: "This is the primary key of the category")
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false, comment: "This is the name of the category")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Categories", x => x.Id);
+                },
+                comment: "This is the category of the product");
+
+            migrationBuilder.CreateTable(
                 name: "AspNetRoleClaims",
                 columns: table => new
                 {
@@ -154,6 +168,104 @@ namespace MarketPlace.Infrastructure.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "ShipingAddresses",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false, comment: "Shipping address identifier")
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Street = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: false, comment: "This is the street of the shipping address"),
+                    City = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false, comment: "This is the city of the shipping address"),
+                    Country = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false, comment: "This is the state of the shipping address"),
+                    ZipCode = table.Column<string>(type: "nvarchar(max)", nullable: false, comment: "This is the zip code of the shipping address"),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false, comment: "User identifier")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ShipingAddresses", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ShipingAddresses_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                },
+                comment: "This is the shipping address");
+
+            migrationBuilder.CreateTable(
+                name: "Products",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false, comment: "Product identifier")
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false, comment: "This is the name of the product"),
+                    Image = table.Column<string>(type: "nvarchar(max)", nullable: false, comment: "This is the image of the product"),
+                    Description = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false, comment: "This is the description of the product"),
+                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false, comment: "This is the price of the product"),
+                    CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false, comment: "This is the date the product was created"),
+                    SellerId = table.Column<string>(type: "nvarchar(450)", nullable: false, comment: "User identifier"),
+                    CategoryId = table.Column<int>(type: "int", nullable: false, comment: "Product Category identifier"),
+                    ShipingAddressId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Products", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Products_AspNetUsers_SellerId",
+                        column: x => x.SellerId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Products_Categories_CategoryId",
+                        column: x => x.CategoryId,
+                        principalTable: "Categories",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Products_ShipingAddresses_ShipingAddressId",
+                        column: x => x.ShipingAddressId,
+                        principalTable: "ShipingAddresses",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ProductBuyers",
+                columns: table => new
+                {
+                    BuyerId = table.Column<string>(type: "nvarchar(450)", nullable: false, comment: "Buyer identifier"),
+                    ProductId = table.Column<int>(type: "int", nullable: false, comment: "Product identifier")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ProductBuyers", x => new { x.BuyerId, x.ProductId });
+                    table.ForeignKey(
+                        name: "FK_ProductBuyers_AspNetUsers_BuyerId",
+                        column: x => x.BuyerId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ProductBuyers_Products_ProductId",
+                        column: x => x.ProductId,
+                        principalTable: "Products",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                },
+                comment: "This is the product buyer");
+
+            migrationBuilder.InsertData(
+                table: "Categories",
+                columns: new[] { "Id", "Name" },
+                values: new object[,]
+                {
+                    { 1, "Electronics" },
+                    { 2, "Clothing" },
+                    { 3, "Furniture" },
+                    { 4, "Books" },
+                    { 5, "Toys" }
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -192,6 +304,31 @@ namespace MarketPlace.Infrastructure.Migrations
                 column: "NormalizedUserName",
                 unique: true,
                 filter: "[NormalizedUserName] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ProductBuyers_ProductId",
+                table: "ProductBuyers",
+                column: "ProductId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Products_CategoryId",
+                table: "Products",
+                column: "CategoryId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Products_SellerId",
+                table: "Products",
+                column: "SellerId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Products_ShipingAddressId",
+                table: "Products",
+                column: "ShipingAddressId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ShipingAddresses_UserId",
+                table: "ShipingAddresses",
+                column: "UserId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -212,7 +349,19 @@ namespace MarketPlace.Infrastructure.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "ProductBuyers");
+
+            migrationBuilder.DropTable(
                 name: "AspNetRoles");
+
+            migrationBuilder.DropTable(
+                name: "Products");
+
+            migrationBuilder.DropTable(
+                name: "Categories");
+
+            migrationBuilder.DropTable(
+                name: "ShipingAddresses");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");

@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
+using static MarketPlace.Infrastructure.Constants.DataConstants;
 
 namespace MarketPlace.Infrastructure.Data.Models
 {
@@ -11,9 +12,9 @@ namespace MarketPlace.Infrastructure.Data.Models
         public int Id { get; set; }
 
         [Required]
+        [MaxLength(CategoryNameMaxLength)]
         [Comment("This is the name of the category")]
         public string Name { get; set; }=string.Empty;
 
-        public ICollection<Product> Products { get; set; } = new List<Product>();
     }
 }

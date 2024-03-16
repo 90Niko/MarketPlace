@@ -29,5 +29,20 @@ namespace MarketPlace.Infrastructure.Constants
         public const int CategoryNameMinLength = 3;
         public const int CategoryNameMaxLength = 50;
 
+        //Shipping Address Constants
+        public const int AddressStreetMinLength = 3;
+        public const int AddressStreetMaxLength = 150;
+
+        public const int AddressCityMinLength = 3;
+        public const int AddressCityMaxLength = 50;
+
+        public const int AddressCountryMinLength = 3;
+        public const int AddressCountryMaxLength = 50;
+
+        public const int AddressZipCodeMinLength = 0;
+        public const int AddressZipCodeMaxLength = 4;
+
+        public const string AddressZipCodeRegularExpression = "^d{4}$";
+
     }
 }

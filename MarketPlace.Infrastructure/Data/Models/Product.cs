@@ -1,12 +1,8 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using static MarketPlace.Infrastructure.Constants.DataConstants;
 
 namespace MarketPlace.Infrastructure.Data.Models
 {
@@ -17,6 +13,7 @@ namespace MarketPlace.Infrastructure.Data.Models
         public int Id { get; set; }
 
         [Required]
+        [MaxLength(ProductNameMaxLength)]
         [Comment("This is the name of the product")]
         public string Name { get; set; }=string.Empty;
 
@@ -25,6 +22,7 @@ namespace MarketPlace.Infrastructure.Data.Models
         public string Image { get; set; }=string.Empty;
 
         [Required]
+        [MaxLength(ProductDescriptionMaxLength)]
         [Comment("This is the description of the product")]
         public string Description { get; set; }=string.Empty;
 
@@ -52,6 +50,5 @@ namespace MarketPlace.Infrastructure.Data.Models
         [Required]
         [ForeignKey("CategoryId")]
         public Category Category { get; set; }=null!;
-
     }
 }

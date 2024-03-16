@@ -12,17 +12,189 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MarketPlace.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240312095801_Initial")]
+    [Migration("20240316102805_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.26")
+                .HasAnnotation("ProductVersion", "6.0.27")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
+
+            modelBuilder.Entity("MarketPlace.Infrastructure.Data.Models.Category", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasComment("This is the primary key of the category");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)")
+                        .HasComment("This is the name of the category");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Categories");
+
+                    b.HasComment("This is the category of the product");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Electronics"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Clothing"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "Furniture"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Name = "Books"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Name = "Toys"
+                        });
+                });
+
+            modelBuilder.Entity("MarketPlace.Infrastructure.Data.Models.Product", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasComment("Product identifier");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("CategoryId")
+                        .HasColumnType("int")
+                        .HasComment("Product Category identifier");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2")
+                        .HasComment("This is the date the product was created");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)")
+                        .HasComment("This is the description of the product");
+
+                    b.Property<string>("Image")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasComment("This is the image of the product");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)")
+                        .HasComment("This is the name of the product");
+
+                    b.Property<decimal?>("Price")
+                        .IsRequired()
+                        .HasColumnType("decimal(18,2)")
+                        .HasComment("This is the price of the product");
+
+                    b.Property<string>("SellerId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)")
+                        .HasComment("User identifier");
+
+                    b.Property<int?>("ShipingAddressId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
+
+                    b.HasIndex("SellerId");
+
+                    b.HasIndex("ShipingAddressId");
+
+                    b.ToTable("Products");
+                });
+
+            modelBuilder.Entity("MarketPlace.Infrastructure.Data.Models.ProductBuyer", b =>
+                {
+                    b.Property<string>("BuyerId")
+                        .HasColumnType("nvarchar(450)")
+                        .HasComment("Buyer identifier");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int")
+                        .HasComment("Product identifier");
+
+                    b.HasKey("BuyerId", "ProductId");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("ProductBuyers");
+
+                    b.HasComment("This is the product buyer");
+                });
+
+            modelBuilder.Entity("MarketPlace.Infrastructure.Data.Models.ShipingAddress", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasComment("Shipping address identifier");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("City")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)")
+                        .HasComment("This is the city of the shipping address");
+
+                    b.Property<string>("Country")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)")
+                        .HasComment("This is the state of the shipping address");
+
+                    b.Property<string>("Street")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)")
+                        .HasComment("This is the street of the shipping address");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)")
+                        .HasComment("User identifier");
+
+                    b.Property<string>("ZipCode")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasComment("This is the zip code of the shipping address");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("ShipingAddresses");
+
+                    b.HasComment("This is the shipping address");
+                });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
@@ -226,6 +398,59 @@ namespace MarketPlace.Infrastructure.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("MarketPlace.Infrastructure.Data.Models.Product", b =>
+                {
+                    b.HasOne("MarketPlace.Infrastructure.Data.Models.Category", "Category")
+                        .WithMany()
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "Seller")
+                        .WithMany()
+                        .HasForeignKey("SellerId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("MarketPlace.Infrastructure.Data.Models.ShipingAddress", null)
+                        .WithMany("Products")
+                        .HasForeignKey("ShipingAddressId");
+
+                    b.Navigation("Category");
+
+                    b.Navigation("Seller");
+                });
+
+            modelBuilder.Entity("MarketPlace.Infrastructure.Data.Models.ProductBuyer", b =>
+                {
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "Buyer")
+                        .WithMany()
+                        .HasForeignKey("BuyerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MarketPlace.Infrastructure.Data.Models.Product", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Buyer");
+
+                    b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("MarketPlace.Infrastructure.Data.Models.ShipingAddress", b =>
+                {
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -275,6 +500,11 @@ namespace MarketPlace.Infrastructure.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("MarketPlace.Infrastructure.Data.Models.ShipingAddress", b =>
+                {
+                    b.Navigation("Products");
                 });
 #pragma warning restore 612, 618
         }
