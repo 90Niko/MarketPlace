@@ -12,7 +12,7 @@ namespace MarketPlace.Infrastructure.Constants
         public const int ProductNameMinLength = 3;
         public const int ProductNameMaxLength = 50;
 
-        public const int ProductDescriptionMinLenght = 10;
+        public const int ProductDescriptionMinLength = 10;
         public const int ProductDescriptionMaxLength = 500;
 
         public const string ProductPriceMinimum = "0";
