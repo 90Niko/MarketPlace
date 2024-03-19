@@ -11,14 +11,7 @@ namespace MarketPlace.Infrastructure.Data
             : base(options)
         {
         }
-        public DbSet<Product> Products { get; set; } = null!;
-
-        public DbSet<ShipingAddress> ShipingAddresses { get; set; } = null!;
-
-        public DbSet<Category> Categories { get; set; } = null!;
-
-        public DbSet<ProductBuyer> ProductBuyers { get; set; } = null!;
-
+        
         protected override void OnModelCreating(ModelBuilder builder)
         {
 
@@ -52,5 +45,12 @@ namespace MarketPlace.Infrastructure.Data
 
             base.OnModelCreating(builder);
         }
+        public DbSet<Product> Products { get; set; } = null!;
+
+        public DbSet<ShipingAddress> ShipingAddresses { get; set; } = null!;
+
+        public DbSet<Category> Categories { get; set; } = null!;
+
+        public DbSet<ProductBuyer> ProductBuyers { get; set; } = null!;
     }
 }

@@ -2,6 +2,9 @@ using MarketPlace.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using MarketPlace.Infrastructure.Data;
+using MarketPlace.Infrastructure.Data.Comman;
+using MarketPlace.Core.Contracts.ProductContract;
+using MarketPlace.Core.Services.ProductService;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,6 +14,11 @@ builder.Services.AddAplicationIdentity(builder.Configuration);
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddAplicationServices();
+
+builder.Services.AddTransient<IRepository, Repository>();
+builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+
+builder.Services.AddScoped<IProductServices, ProductServices>();
 
 var app = builder.Build();
 

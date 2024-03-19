@@ -1,7 +1,10 @@
 ﻿using MarketPlace.Core.Contracts.ProductContract;
 using MarketPlace.Core.Models.ProductDto;
 using MarketPlace.Infrastructure.Data.Comman;
+using MarketPlace.Infrastructure.Data.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
+
 
 namespace MarketPlace.Core.Services.ProductService
 {
@@ -16,7 +19,7 @@ namespace MarketPlace.Core.Services.ProductService
 
         public async Task<IEnumerable<ProductCategoryServiceModel>> AllCategoriesAsync()
         {
-            return await _repository.AllReadOnly<ProductCategoryServiceModel>()
+            return await _repository.AllReadOnly<Category>()
                 .Select(c => new ProductCategoryServiceModel
                 {
                     Id = c.Id,
@@ -25,21 +28,23 @@ namespace MarketPlace.Core.Services.ProductService
                 .ToListAsync();
         }
 
-        public async Task CreateAsync(ProductFormModel model)
-        {
-            var product = new ProductFormModel
+        public async  Task<int>  CreateAsync(ProductFormModel model,string sellerId)
+        {   
+            var product = new Infrastructure.Data.Models.Product
             {
                 Name = model.Name,
                 Description = model.Description,
                 Price = model.Price,
-                Image = model.Image,
+                CategoryId = model.CategoryId,
                 CreatedOn = DateTime.UtcNow,
-                CategoryId = model.CategoryId
+                SellerId =sellerId.ToString()
             };
-
+    
             await _repository.AddAsync(product);
             await _repository.SaveChangesAsync();
 
+           return product.Id;
+     
         }
     }
 }

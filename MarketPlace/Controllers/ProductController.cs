@@ -1,13 +1,17 @@
 ﻿using MarketPlace.Core.Contracts.ProductContract;
 using MarketPlace.Core.Models.ProductDto;
+using MarketPlace.Infrastructure.Data;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 namespace MarketPlace.Controllers
 {
     [Authorize]
     public class ProductController : Controller
     {
+
         private readonly IProductServices _productServices;
 
         public ProductController(IProductServices productServices)
@@ -25,17 +29,23 @@ namespace MarketPlace.Controllers
             return View(model);
         }
 
-
         [HttpPost]
         public async Task<IActionResult> Add(ProductFormModel model)
         {
             if (!ModelState.IsValid)
             {
-               model.Categories = await _productServices.AllCategoriesAsync();
+                model.Categories = await _productServices.AllCategoriesAsync();
                 return View(model);
             }
 
-            model.Categories = await _productServices.AllCategoriesAsync();
+            string sellerId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            if (sellerId == null)
+            {
+                return BadRequest();
+            }
+
+            var productId = await _productServices.CreateAsync(model, sellerId);
 
             return RedirectToAction("Index", "Home");
         }

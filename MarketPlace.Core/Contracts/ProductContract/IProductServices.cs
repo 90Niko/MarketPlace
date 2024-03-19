@@ -11,6 +11,6 @@ namespace MarketPlace.Core.Contracts.ProductContract
     {
         Task<IEnumerable<ProductCategoryServiceModel>> AllCategoriesAsync();
 
-        Task CreateAsync(ProductFormModel product);    
+        Task<int> CreateAsync(ProductFormModel product,string sellerId);    
     }
 }
