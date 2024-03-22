@@ -1,6 +1,6 @@
-﻿using MarketPlace.Core.Contracts.ProductContract;
-using MarketPlace.Core.Models.ProductDto;
+﻿using MarketPlace.Core.Models.ProductDto;
 using MarketPlace.Infrastructure.Data;
+using MarketPlace.Infrastructure.Data.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -11,43 +11,96 @@ namespace MarketPlace.Controllers
     [Authorize]
     public class ProductController : Controller
     {
+        private readonly ApplicationDbContext data;
 
-        private readonly IProductServices _productServices;
-
-        public ProductController(IProductServices productServices)
-        {
-            _productServices = productServices;
-        }
+        public ProductController(ApplicationDbContext data)
+            => this.data = data;
 
         [HttpGet]
         public async Task<IActionResult> Add()
         {
-            var model = new ProductFormModel
+            ProductFormModel model = new ProductFormModel()
             {
-                Categories = await _productServices.AllCategoriesAsync()
+                Categories = await data.Categories.Select(c => new ProductCategoryServiceModel()
+                {
+                    Id = c.Id,
+                    Name = c.Name
+
+                }).ToListAsync()
             };
+
             return View(model);
         }
 
         [HttpPost]
         public async Task<IActionResult> Add(ProductFormModel model)
         {
-            if (!ModelState.IsValid)
+            var userId = GetUserId();
+            var newProduct = new Product
             {
-                model.Categories = await _productServices.AllCategoriesAsync();
-                return View(model);
-            }
+                Name = model.Name,
+                Description = model.Description,
+                Price = model.Price,
+                Image = model.Image,
+                CreatedOn = DateTime.Now,
+                SellerId = userId,
+                CategoryId = model.CategoryId
+            };
 
-            string sellerId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            data.Products.Add(newProduct);
+            data.SaveChanges();
 
-            if (sellerId == null)
-            {
-                return BadRequest();
-            }
-
-            var productId = await _productServices.CreateAsync(model, sellerId);
-
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction(nameof(All));
         }
+        public async Task<IActionResult> All()
+        {
+            var products = await data
+                .Products
+                .Select(p => new AllProductsModel()
+                {
+                    Id = p.Id,
+                    Description = p.Description,
+                    Name = p.Name,
+                    Price = (decimal)p.Price,
+                    Image = p.Image,
+                    CreatedOn = p.CreatedOn.ToString("dd/MM/yyyy"),
+                    Seller = p.Seller.UserName,
+                    Category = p.Category.Name
+                })
+               .ToListAsync();
+
+            return View(products);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var userId = GetUserId();
+            var product = await data.Products.FirstOrDefaultAsync(p => p.Id == id && p.SellerId == userId);
+
+            if (product == null)
+            {
+                return NotFound();
+            }
+
+            data.Products.Remove(product);
+            await data.SaveChangesAsync();
+
+            return RedirectToAction(nameof(All));
+        }
+        private string GetUserId()
+        {
+            return User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? string.Empty;
+        }
+
+        private IEnumerable<ProductCategoryServiceModel> GetCategories()
+            => data
+                .Categories
+                .Select(t => new ProductCategoryServiceModel()
+                {
+                    Id = t.Id,
+                    Name = t.Name
+                });
+
     }
 }

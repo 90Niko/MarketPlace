@@ -29,7 +29,7 @@ namespace MarketPlace.Infrastructure.Data.Models
         [Required]
         [Column(TypeName = "decimal(18,2)")]
         [Comment("This is the price of the product")]
-        public decimal? Price { get; set; }
+        public decimal Price { get; set; }
 
         [Required]
         [Comment("This is the date the product was created")]

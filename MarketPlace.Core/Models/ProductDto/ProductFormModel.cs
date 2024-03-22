@@ -24,8 +24,10 @@ namespace MarketPlace.Core.Models.ProductDto
 
         public DateTime CreatedOn { get; set; }
 
+        public string Seller { get; set; } = null!;
+
         [Display(Name = "Category")]
-        public int CategoryId { get; set; }
+        public int CategoryId{ get; set; }
 
         public IEnumerable<ProductCategoryServiceModel> Categories { get; set; } = new List<ProductCategoryServiceModel>();
     }
