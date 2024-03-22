@@ -88,6 +88,51 @@ namespace MarketPlace.Controllers
 
             return RedirectToAction(nameof(All));
         }
+        [HttpGet]
+        public async Task<IActionResult> Edit(int id)
+        {
+            var userId = GetUserId();
+            var product = await data.Products.FirstOrDefaultAsync(p => p.Id == id && p.SellerId == userId);
+
+            if (product == null)
+            {
+                return NotFound();
+            }
+
+            var model = new ProductFormModel
+            {
+                Name = product.Name,
+                Description = product.Description,
+                Price = product.Price,
+                Image = product.Image,
+                CategoryId = product.CategoryId,
+                Categories = GetCategories()
+            };
+
+            return View(model);
+        }
+        [HttpPost]
+        public async Task<IActionResult> Edit(int id, ProductFormModel model)
+        {
+            var userId = GetUserId();
+            var product = await data.Products.FirstOrDefaultAsync(p => p.Id == id && p.SellerId == userId);
+
+            if (product == null)
+            {
+                return NotFound();
+            }
+
+            product.Name = model.Name;
+            product.Description = model.Description;
+            product.Price = model.Price;
+            product.Image = model.Image;
+            product.CategoryId = model.CategoryId;
+
+            await data.SaveChangesAsync();
+
+            return RedirectToAction(nameof(All));
+        }
+
         private string GetUserId()
         {
             return User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? string.Empty;
