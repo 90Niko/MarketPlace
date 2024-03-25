@@ -39,6 +39,6 @@ namespace MarketPlace.Infrastructure.Data.Models
         [ForeignKey("UserId")]
         public IdentityUser User { get; set; } = null!;
 
-        public ICollection<Product> Products { get; set; } = null!;
+        public ICollection<ProductBuyer> ProductsBuyer { get; set; } = null!;
     }
 }

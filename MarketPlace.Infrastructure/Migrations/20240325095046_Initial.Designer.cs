@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MarketPlace.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240316102805_Initial")]
+    [Migration("20240325095046_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -69,6 +69,16 @@ namespace MarketPlace.Infrastructure.Migrations
                         new
                         {
                             Id = 5,
+                            Name = "Home and Garten"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Name = "Sport"
+                        },
+                        new
+                        {
+                            Id = 7,
                             Name = "Toys"
                         });
                 });
@@ -107,8 +117,7 @@ namespace MarketPlace.Infrastructure.Migrations
                         .HasColumnType("nvarchar(50)")
                         .HasComment("This is the name of the product");
 
-                    b.Property<decimal?>("Price")
-                        .IsRequired()
+                    b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)")
                         .HasComment("This is the price of the product");
 
@@ -117,16 +126,11 @@ namespace MarketPlace.Infrastructure.Migrations
                         .HasColumnType("nvarchar(450)")
                         .HasComment("User identifier");
 
-                    b.Property<int?>("ShipingAddressId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.HasIndex("CategoryId");
 
                     b.HasIndex("SellerId");
-
-                    b.HasIndex("ShipingAddressId");
 
                     b.ToTable("Products");
                 });
@@ -141,9 +145,14 @@ namespace MarketPlace.Infrastructure.Migrations
                         .HasColumnType("int")
                         .HasComment("Product identifier");
 
+                    b.Property<int?>("ShipingAddressId")
+                        .HasColumnType("int");
+
                     b.HasKey("BuyerId", "ProductId");
 
                     b.HasIndex("ProductId");
+
+                    b.HasIndex("ShipingAddressId");
 
                     b.ToTable("ProductBuyers");
 
@@ -412,10 +421,6 @@ namespace MarketPlace.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("MarketPlace.Infrastructure.Data.Models.ShipingAddress", null)
-                        .WithMany("Products")
-                        .HasForeignKey("ShipingAddressId");
-
                     b.Navigation("Category");
 
                     b.Navigation("Seller");
@@ -434,6 +439,10 @@ namespace MarketPlace.Infrastructure.Migrations
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("MarketPlace.Infrastructure.Data.Models.ShipingAddress", null)
+                        .WithMany("ProductsBuyer")
+                        .HasForeignKey("ShipingAddressId");
 
                     b.Navigation("Buyer");
 
@@ -504,7 +513,7 @@ namespace MarketPlace.Infrastructure.Migrations
 
             modelBuilder.Entity("MarketPlace.Infrastructure.Data.Models.ShipingAddress", b =>
                 {
-                    b.Navigation("Products");
+                    b.Navigation("ProductsBuyer");
                 });
 #pragma warning restore 612, 618
         }

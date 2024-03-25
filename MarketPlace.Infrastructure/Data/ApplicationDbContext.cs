@@ -11,18 +11,18 @@ namespace MarketPlace.Infrastructure.Data
             : base(options)
         {
         }
-        
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
 
             builder.Entity<ProductBuyer>()
                 .HasKey(pb => new { pb.BuyerId, pb.ProductId });
 
-           builder.Entity<Product>()
-                .HasOne(p => p.Category)
-                .WithMany()
-                .HasForeignKey(p => p.CategoryId)
-                .OnDelete(DeleteBehavior.Restrict);
+            builder.Entity<Product>()
+                 .HasOne(p => p.Category)
+                 .WithMany()
+                 .HasForeignKey(p => p.CategoryId)
+                 .OnDelete(DeleteBehavior.Restrict);
 
             builder.Entity<Product>()
                 .HasOne(p => p.Seller)
@@ -41,7 +41,9 @@ namespace MarketPlace.Infrastructure.Data
                            new Category { Id = 2, Name = "Clothing" },
                            new Category { Id = 3, Name = "Furniture" },
                            new Category { Id = 4, Name = "Books" },
-                           new Category { Id = 5, Name = "Toys" });
+                           new Category { Id = 5, Name = "Home and Garten" },
+                           new Category { Id = 6, Name = "Sport" },
+                           new Category { Id = 7, Name = "Toys" });
 
             base.OnModelCreating(builder);
         }

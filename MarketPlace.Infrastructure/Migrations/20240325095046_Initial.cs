@@ -204,8 +204,7 @@ namespace MarketPlace.Infrastructure.Migrations
                     Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false, comment: "This is the price of the product"),
                     CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false, comment: "This is the date the product was created"),
                     SellerId = table.Column<string>(type: "nvarchar(450)", nullable: false, comment: "User identifier"),
-                    CategoryId = table.Column<int>(type: "int", nullable: false, comment: "Product Category identifier"),
-                    ShipingAddressId = table.Column<int>(type: "int", nullable: true)
+                    CategoryId = table.Column<int>(type: "int", nullable: false, comment: "Product Category identifier")
                 },
                 constraints: table =>
                 {
@@ -222,11 +221,6 @@ namespace MarketPlace.Infrastructure.Migrations
                         principalTable: "Categories",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Products_ShipingAddresses_ShipingAddressId",
-                        column: x => x.ShipingAddressId,
-                        principalTable: "ShipingAddresses",
-                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -234,7 +228,8 @@ namespace MarketPlace.Infrastructure.Migrations
                 columns: table => new
                 {
                     BuyerId = table.Column<string>(type: "nvarchar(450)", nullable: false, comment: "Buyer identifier"),
-                    ProductId = table.Column<int>(type: "int", nullable: false, comment: "Product identifier")
+                    ProductId = table.Column<int>(type: "int", nullable: false, comment: "Product identifier"),
+                    ShipingAddressId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -251,6 +246,11 @@ namespace MarketPlace.Infrastructure.Migrations
                         principalTable: "Products",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ProductBuyers_ShipingAddresses_ShipingAddressId",
+                        column: x => x.ShipingAddressId,
+                        principalTable: "ShipingAddresses",
+                        principalColumn: "Id");
                 },
                 comment: "This is the product buyer");
 
@@ -263,7 +263,9 @@ namespace MarketPlace.Infrastructure.Migrations
                     { 2, "Clothing" },
                     { 3, "Furniture" },
                     { 4, "Books" },
-                    { 5, "Toys" }
+                    { 5, "Home and Garten" },
+                    { 6, "Sport" },
+                    { 7, "Toys" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -311,6 +313,11 @@ namespace MarketPlace.Infrastructure.Migrations
                 column: "ProductId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_ProductBuyers_ShipingAddressId",
+                table: "ProductBuyers",
+                column: "ShipingAddressId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Products_CategoryId",
                 table: "Products",
                 column: "CategoryId");
@@ -319,11 +326,6 @@ namespace MarketPlace.Infrastructure.Migrations
                 name: "IX_Products_SellerId",
                 table: "Products",
                 column: "SellerId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Products_ShipingAddressId",
-                table: "Products",
-                column: "ShipingAddressId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ShipingAddresses_UserId",
@@ -358,10 +360,10 @@ namespace MarketPlace.Infrastructure.Migrations
                 name: "Products");
 
             migrationBuilder.DropTable(
-                name: "Categories");
+                name: "ShipingAddresses");
 
             migrationBuilder.DropTable(
-                name: "ShipingAddresses");
+                name: "Categories");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");

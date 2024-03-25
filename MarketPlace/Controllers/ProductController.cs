@@ -4,17 +4,18 @@ using MarketPlace.Infrastructure.Data.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Security.Claims;
 
 namespace MarketPlace.Controllers
 {
     [Authorize]
-    public class ProductController : Controller
+    public class ProductController : BaseController
     {
         private readonly ApplicationDbContext data;
-
         public ProductController(ApplicationDbContext data)
-            => this.data = data;
+              : base(data)
+        {
+            this.data = data;
+        }
 
         [HttpGet]
         public async Task<IActionResult> Add()
@@ -36,6 +37,12 @@ namespace MarketPlace.Controllers
         public async Task<IActionResult> Add(ProductFormModel model)
         {
             var userId = GetUserId();
+
+            if (userId == null)
+            {
+                return Unauthorized();
+            }
+
             var newProduct = new Product
             {
                 Name = model.Name,
@@ -47,8 +54,8 @@ namespace MarketPlace.Controllers
                 CategoryId = model.CategoryId
             };
 
-            data.Products.Add(newProduct);
-            data.SaveChanges();
+            await data.Products.AddAsync(newProduct);
+            await data.SaveChangesAsync();
 
             return RedirectToAction(nameof(All));
         }
@@ -76,6 +83,12 @@ namespace MarketPlace.Controllers
         public async Task<IActionResult> Delete(int id)
         {
             var userId = GetUserId();
+
+            if (userId == null)
+            {
+                return Unauthorized();
+            }
+
             var product = await data.Products.FirstOrDefaultAsync(p => p.Id == id && p.SellerId == userId);
 
             if (product == null)
@@ -88,10 +101,17 @@ namespace MarketPlace.Controllers
 
             return RedirectToAction(nameof(All));
         }
+
         [HttpGet]
         public async Task<IActionResult> Edit(int id)
         {
             var userId = GetUserId();
+
+            if (userId == null)
+            {
+                return Unauthorized();
+            }
+
             var product = await data.Products.FirstOrDefaultAsync(p => p.Id == id && p.SellerId == userId);
 
             if (product == null)
@@ -111,10 +131,17 @@ namespace MarketPlace.Controllers
 
             return View(model);
         }
+
         [HttpPost]
         public async Task<IActionResult> Edit(int id, ProductFormModel model)
         {
             var userId = GetUserId();
+
+            if (userId == null)
+            {
+                return Unauthorized();
+            }
+
             var product = await data.Products.FirstOrDefaultAsync(p => p.Id == id && p.SellerId == userId);
 
             if (product == null)
@@ -132,20 +159,5 @@ namespace MarketPlace.Controllers
 
             return RedirectToAction(nameof(All));
         }
-
-        private string GetUserId()
-        {
-            return User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? string.Empty;
-        }
-
-        private IEnumerable<ProductCategoryServiceModel> GetCategories()
-            => data
-                .Categories
-                .Select(t => new ProductCategoryServiceModel()
-                {
-                    Id = t.Id,
-                    Name = t.Name
-                });
-
     }
 }

@@ -15,9 +15,11 @@ namespace MarketPlace.Core.Models.ProductDto
         public string Description { get; set; } = null!;
 
         public decimal Price { get; set; }
+
         public string Image { get; set; } = null!;
 
         public string CreatedOn { get; set; } = null!;
+
         public string Seller { get; set; } = null!;
 
         public string Category { get; set; } = null!;
