@@ -5,12 +5,11 @@
     ViewBag.Title = "My Cart";
 }
 
-
 <h2 class="text-center">@ViewBag.Title</h2>
 <hr />
 
 <div class="text-center row">
-    
+
     @foreach (var a in Model)
     {
         <div class="card col-4 card border-dark" style="width: 20rem; ">
@@ -18,28 +17,31 @@
                 <h5 class="card-header ">@a.ProductName</h5>
                 <p class="mb-0"><span class="fw-bold">Category: </span>@a.Category</p>
                 <p class="mb-0"><span class="fw-bold">Description: </span>@a.ProductDescription</p>
-                <p class="mb-0"><span class="fw-bold">Price: </span>@a.ProductPrice BGN</p>
+                <p class="mb-0"><span class="fw-bold">Price: </span>@a.ProductPrice EUR</p>
                 <p class="mb-0"><span class="fw-bold">Seller: </span>@a.Seller</p>
             </div>
 
-            @if (User.Identity.Name != a.Seller)
+            @if (User?.Identity?.Name != a.Seller)
             {
-                <form class="input-group-sm " asp-controller="Cart" asp-action="RemoveFromCart" asp-route-id="@a.ProductId">
-                    <input type="submit" value="Remove from Cart" class="fs-6 btn btn-info mb-3 w-100 p-3 fw-bold" />
+                <form class="input-group-sm " asp-controller="Cart" asp-action="RemoveFromCart" asp-route-id="@a.Id">
+                    <input type="submit" value="Remove from Cart" class="fs-6 btn btn-outline-dark mb-3 w-100 p-3 fw-bold" />
                 </form>
             }
         </div>
-
-        @if (Model.Any())
-        {
-            <hr />
-            <form class="d-grid gap-2 col-6 mx-auto" asp-controller="Cart" asp-action="Buy" asp-route-id="@a.ProductId">
-                <input type="submit" value="Buy Now" class="fs-6 btn btn-outline-dark mb-3 w-100 p-3 fw-bold" />
-            </form>
-        } 
     }
 </div>
 
+@if (Model.Any())
+{
+    <hr />
+
+    <li>Total Price: @Model.Sum(s => s.ProductPrice) BGN</li>
+
+    <div class="text-center">
+        <a class="fs-6 btn btn-outline-dark mb-3 w-100 p-3 fw-bold" asp-area="" asp-controller="Cart" asp-action="AddAddress">Add Shipping Address</a>
+    </div>
+     
+}
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />

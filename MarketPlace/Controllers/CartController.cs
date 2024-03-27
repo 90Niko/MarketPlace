@@ -1,4 +1,5 @@
-﻿using MarketPlace.Core.Models.CartDto;
+﻿using MarketPlace.Core.Models.AddressDto;
+using MarketPlace.Core.Models.CartDto;
 using MarketPlace.Infrastructure.Data;
 using MarketPlace.Infrastructure.Data.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -25,7 +26,7 @@ namespace MarketPlace.Controllers
                 .Where(p => p.BuyerId == userId)
                .Select(p => new CartFormModel()
                {
-                   ProductId = p.Product.Id,
+                   Id = p.Product.Id,
                    ProductDescription = p.Product.Description,
                    ProductName = p.Product.Name,
                    ProductPrice = p.Product.Price,
@@ -60,18 +61,18 @@ namespace MarketPlace.Controllers
             return RedirectToAction(nameof(Cart));
         }
 
-        public async Task<IActionResult> Buy(int id)
+        public async Task<IActionResult> Buy(string buyerId)
         {
-            var productToBuy = await data.ProductBuyers
-                .Where(p => p.ProductId == id && p.BuyerId == GetUserId())
-                .FirstOrDefaultAsync();
+            buyerId = GetUserId();
+            List<ProductBuyer> products = await data.ProductBuyers
+                 .Where(p => p.BuyerId == buyerId)
+                 .ToListAsync();
 
-            if (productToBuy == null)
+            foreach (var product in products)
             {
-                return BadRequest();
+                data.ProductBuyers.Remove(product);
             }
 
-            data.ProductBuyers.Remove(productToBuy);
             data.SaveChanges();
 
             return RedirectToAction(nameof(Cart));
@@ -87,7 +88,7 @@ namespace MarketPlace.Controllers
                 return Unauthorized();
             }
             var productToRemove = await data.ProductBuyers
-                .Where(p => p.ProductId == model.ProductId && p.BuyerId == userId)
+                .Where(p => p.ProductId == model.Id && p.BuyerId == userId)
                 .FirstOrDefaultAsync();
 
             return View(productToRemove);
@@ -106,6 +107,50 @@ namespace MarketPlace.Controllers
             }
 
             data.ProductBuyers.Remove(productToRemove);
+            data.SaveChanges();
+
+            return RedirectToAction(nameof(Cart));
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> AddAddress()
+        {
+            AddressFormModel model = new AddressFormModel()
+            {
+                Products = await data.ProductBuyers.Where(p => p.BuyerId == GetUserId()).Select(p => p.Product).ToListAsync()
+            };
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddAddress(AddressFormModel model)
+        {
+            string userId = GetUserId();
+
+            if (userId == null)
+            {
+                return Unauthorized();
+            }
+
+            var address = new ShipingAddress
+            {
+                Id = model.Id,
+                Recipient = model.Recipient,
+                City = model.City,
+                Country = model.Country,
+                ZipCode = model.ZipCode,
+                Street = model.Street,
+                UserId = userId,
+                Products = await data.ProductBuyers.Where(p => p.BuyerId == userId).Select(p => p.Product).ToListAsync()
+            };
+
+            if (address == null)
+            {
+                return BadRequest();
+            }
+            
+            data.ShipingAddresses.Add(address);
             data.SaveChanges();
 
             return RedirectToAction(nameof(Cart));

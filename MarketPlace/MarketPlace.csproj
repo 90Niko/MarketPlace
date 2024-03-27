@@ -24,4 +24,8 @@
     <ProjectReference Include="..\MarketPlace.Core\MarketPlace.Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Views\Address\" />
+  </ItemGroup>
+
 </Project>

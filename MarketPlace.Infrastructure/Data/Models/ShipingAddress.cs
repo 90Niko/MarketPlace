@@ -14,6 +14,10 @@ namespace MarketPlace.Infrastructure.Data.Models
         public int Id { get; set; }
 
         [Required]
+        [Comment("This is the name of the Reciver")]
+        public string Recipient { get; set; } = string.Empty;
+
+        [Required]
         [MaxLength(AddressStreetMaxLength)]
         [Comment("This is the street of the shipping address")]
         public string Street { get; set; } = string.Empty;
@@ -36,9 +40,6 @@ namespace MarketPlace.Infrastructure.Data.Models
         [Comment("User identifier")]
         public string UserId { get; set; } = string.Empty;
 
-        [ForeignKey("UserId")]
-        public IdentityUser User { get; set; } = null!;
-
-        public ICollection<ProductBuyer> ProductsBuyer { get; set; } = null!;
+        public ICollection<Product> Products { get; set; } = null!;
     }
 }

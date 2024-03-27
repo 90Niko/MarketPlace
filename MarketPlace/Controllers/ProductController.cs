@@ -78,6 +78,25 @@ namespace MarketPlace.Controllers
 
             return View(products);
         }
+        public async Task<IActionResult> Mine()
+        {
+            var products = await data
+                .Products
+                .Select(p => new AllProductsModel()
+                {
+                    Id = p.Id,
+                    Description = p.Description,
+                    Name = p.Name,
+                    Price = (decimal)p.Price,
+                    Image = p.Image,
+                    CreatedOn = p.CreatedOn.ToString("dd/MM/yyyy"),
+                    Seller = p.Seller.UserName,
+                    Category = p.Category.Name
+                })
+               .ToListAsync();
+
+            return View(products);
+        }
 
         [HttpGet]
         public async Task<IActionResult> Delete(int id)

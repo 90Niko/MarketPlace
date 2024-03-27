@@ -29,12 +29,7 @@ namespace MarketPlace.Infrastructure.Data
                 .WithMany()
                 .HasForeignKey(p => p.SellerId)
                 .OnDelete(DeleteBehavior.Restrict);
-
-            builder.Entity<ShipingAddress>()
-                .HasOne(sa => sa.User)
-                .WithMany()
-                .HasForeignKey(sa => sa.UserId)
-                .OnDelete(DeleteBehavior.Restrict);
+           
 
             builder.Entity<Category>()
                 .HasData(new Category { Id = 1, Name = "Electronics" },

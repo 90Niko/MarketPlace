@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MarketPlace.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240325095046_Initial")]
+    [Migration("20240326095457_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -126,11 +126,16 @@ namespace MarketPlace.Infrastructure.Migrations
                         .HasColumnType("nvarchar(450)")
                         .HasComment("User identifier");
 
+                    b.Property<int?>("ShipingAddressId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("CategoryId");
 
                     b.HasIndex("SellerId");
+
+                    b.HasIndex("ShipingAddressId");
 
                     b.ToTable("Products");
                 });
@@ -145,14 +150,9 @@ namespace MarketPlace.Infrastructure.Migrations
                         .HasColumnType("int")
                         .HasComment("Product identifier");
 
-                    b.Property<int?>("ShipingAddressId")
-                        .HasColumnType("int");
-
                     b.HasKey("BuyerId", "ProductId");
 
                     b.HasIndex("ProductId");
-
-                    b.HasIndex("ShipingAddressId");
 
                     b.ToTable("ProductBuyers");
 
@@ -180,6 +180,11 @@ namespace MarketPlace.Infrastructure.Migrations
                         .HasColumnType("nvarchar(50)")
                         .HasComment("This is the state of the shipping address");
 
+                    b.Property<string>("Recipient")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasComment("This is the name of the Reciver");
+
                     b.Property<string>("Street")
                         .IsRequired()
                         .HasMaxLength(150)
@@ -188,7 +193,7 @@ namespace MarketPlace.Infrastructure.Migrations
 
                     b.Property<string>("UserId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)")
+                        .HasColumnType("nvarchar(max)")
                         .HasComment("User identifier");
 
                     b.Property<string>("ZipCode")
@@ -197,8 +202,6 @@ namespace MarketPlace.Infrastructure.Migrations
                         .HasComment("This is the zip code of the shipping address");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("ShipingAddresses");
 
@@ -421,6 +424,10 @@ namespace MarketPlace.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("MarketPlace.Infrastructure.Data.Models.ShipingAddress", null)
+                        .WithMany("Products")
+                        .HasForeignKey("ShipingAddressId");
+
                     b.Navigation("Category");
 
                     b.Navigation("Seller");
@@ -440,24 +447,9 @@ namespace MarketPlace.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("MarketPlace.Infrastructure.Data.Models.ShipingAddress", null)
-                        .WithMany("ProductsBuyer")
-                        .HasForeignKey("ShipingAddressId");
-
                     b.Navigation("Buyer");
 
                     b.Navigation("Product");
-                });
-
-            modelBuilder.Entity("MarketPlace.Infrastructure.Data.Models.ShipingAddress", b =>
-                {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -513,7 +505,7 @@ namespace MarketPlace.Infrastructure.Migrations
 
             modelBuilder.Entity("MarketPlace.Infrastructure.Data.Models.ShipingAddress", b =>
                 {
-                    b.Navigation("ProductsBuyer");
+                    b.Navigation("Products");
                 });
 #pragma warning restore 612, 618
         }
