@@ -20,10 +20,15 @@ namespace MarketPlace.Controllers
 
         public async Task<IActionResult> Cart()
         {
-            var userId = GetUserId();
+            string userId = GetUserId();
+
+            if (userId == null)
+            {
+                return Unauthorized();
+            }
 
             var productBuyer = await data.ProductBuyers
-                .Where(p => p.BuyerId == userId)
+               .Where(p => p.BuyerId == userId)
                .Select(p => new CartFormModel()
                {
                    Id = p.Product.Id,
@@ -41,13 +46,26 @@ namespace MarketPlace.Controllers
         public async Task<IActionResult> AddTocart(int id)
         {
             var productToAdd = await data.Products.FindAsync(id);
-
+    
             if (productToAdd == null)
             {
                 return BadRequest();
             }
-
             string userId = GetUserId();
+
+            if (productToAdd.SellerId == userId)
+            {
+              return BadHttpRequestException("You can't buy your own product!");
+            }
+
+          var checkProduct = await data.ProductBuyers
+                .Where(p => p.ProductId == productToAdd.Id && p.BuyerId == userId)
+                .FirstOrDefaultAsync();
+
+            if (checkProduct != null)
+            {
+               return BadHttpRequestException("You already have this product in your cart!");
+            }
 
             var productBuyer = new ProductBuyer
             {
@@ -59,6 +77,14 @@ namespace MarketPlace.Controllers
             data.SaveChanges();
 
             return RedirectToAction(nameof(Cart));
+        }
+
+        private IActionResult BadHttpRequestException(string v)
+        {
+           
+            var badRequest = new BadRequestObjectResult(v);
+
+            return badRequest;
         }
 
         public async Task<IActionResult> Buy(string buyerId)
@@ -91,6 +117,7 @@ namespace MarketPlace.Controllers
                 .Where(p => p.ProductId == model.Id && p.BuyerId == userId)
                 .FirstOrDefaultAsync();
 
+         
             return View(productToRemove);
         }
 
@@ -100,7 +127,7 @@ namespace MarketPlace.Controllers
             var productToRemove = await data.ProductBuyers
                 .Where(p => p.ProductId == id && p.BuyerId == GetUserId())
                 .FirstOrDefaultAsync();
-
+            
             if (productToRemove == null)
             {
                 return BadRequest();

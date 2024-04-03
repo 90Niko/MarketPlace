@@ -109,6 +109,12 @@ namespace MarketPlace.Infrastructure.Migrations
                         .HasColumnType("nvarchar(max)")
                         .HasComment("This is the image of the product");
 
+                    b.Property<bool>("IsApproved")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsSold")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(50)
@@ -118,6 +124,15 @@ namespace MarketPlace.Infrastructure.Migrations
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)")
                         .HasComment("This is the price of the product");
+
+                    b.Property<int?>("ProductRatingId")
+                        .IsRequired()
+                        .HasColumnType("int")
+                        .HasComment("Product Rating identifier");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int")
+                        .HasComment("This is the quantity of the product");
 
                     b.Property<string>("SellerId")
                         .IsRequired()
@@ -130,6 +145,8 @@ namespace MarketPlace.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CategoryId");
+
+                    b.HasIndex("ProductRatingId");
 
                     b.HasIndex("SellerId");
 
@@ -155,6 +172,39 @@ namespace MarketPlace.Infrastructure.Migrations
                     b.ToTable("ProductBuyers");
 
                     b.HasComment("This is the product buyer");
+                });
+
+            modelBuilder.Entity("MarketPlace.Infrastructure.Data.Models.ProductRating", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasComment("Product rating identifier");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("Comment")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)")
+                        .HasComment("This is the comment of the product");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2")
+                        .HasComment("This is the date the product was rated");
+
+                    b.Property<decimal>("Rating")
+                        .HasColumnType("decimal(18,2)")
+                        .HasComment("This is the rating of the product");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasComment("User who submitted the rating");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ProductRatings");
                 });
 
             modelBuilder.Entity("MarketPlace.Infrastructure.Data.Models.ShipingAddress", b =>
@@ -413,13 +463,19 @@ namespace MarketPlace.Infrastructure.Migrations
                     b.HasOne("MarketPlace.Infrastructure.Data.Models.Category", "Category")
                         .WithMany()
                         .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MarketPlace.Infrastructure.Data.Models.ProductRating", "ProductRating")
+                        .WithMany()
+                        .HasForeignKey("ProductRatingId")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "Seller")
                         .WithMany()
                         .HasForeignKey("SellerId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("MarketPlace.Infrastructure.Data.Models.ShipingAddress", null)
@@ -427,6 +483,8 @@ namespace MarketPlace.Infrastructure.Migrations
                         .HasForeignKey("ShipingAddressId");
 
                     b.Navigation("Category");
+
+                    b.Navigation("ProductRating");
 
                     b.Navigation("Seller");
                 });
@@ -436,13 +494,13 @@ namespace MarketPlace.Infrastructure.Migrations
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "Buyer")
                         .WithMany()
                         .HasForeignKey("BuyerId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("MarketPlace.Infrastructure.Data.Models.Product", "Product")
                         .WithMany()
                         .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Buyer");

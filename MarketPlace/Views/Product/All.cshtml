@@ -6,14 +6,13 @@
     ViewBag.Title = "All Products";
 }
 
-
 <h2 class="text-center">@ViewBag.Title</h2>
 <hr />
 
 <div class="text-center row">
     @foreach (var a in Model)
     {
-        <div class="card col-4" style="width: 20rem; ">
+        <div class="card col-4 border border-success" style="width: 20rem;">
             <div class="card-body">
                 <h5 class="card-title mt-1">@a.Name</h5>
                 <img class="card-img-top" src=@a.Image alt="Product Image">
@@ -27,12 +26,12 @@
             @if (User.Identity.Name ==a.Seller)
             {
                 <a asp-controller="Product" asp-action="Edit" asp-route-id="@a.Id" class="fs-6 btn btn-outline-dark mb-3 w-100 p-3 fw-bold">Edit</a>
-                <a asp-controller="Product" asp-action="Delete" asp-route-id="@a.Id" class="fs-6 btn btn-outline-dark mb-3 w-100 p-3 fw-bold">Delete</a>
+                <a asp-controller="Product" asp-action="Delete" asp-route-id="@a.Id" class="fs-6 btn btn-outline-danger mb-3 w-100 p-3 fw-bold">Delete</a>
             }
             else
             {
-                <form class="input-group-sm " asp-controller="Cart" asp-action="AddToCart" asp-route-id="@a.Id">
-                    <input type="submit" value="Add to Cart" class="fs-6 btn btn-warning mb-3 w-100 p-3 fw-bold" />
+                <form class="input-group-sm"asp-controller="Cart" asp-action="AddToCart" asp-route-id="@a.Id">
+                    <input type="submit" value="Add to Cart" class="fs-6 btn btn-outline-success mb-3 w-100 p-3 fw-bold" />
                 </form>
             }
         </div>

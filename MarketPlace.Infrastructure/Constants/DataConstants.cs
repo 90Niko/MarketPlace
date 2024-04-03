@@ -44,5 +44,13 @@ namespace MarketPlace.Infrastructure.Constants
 
         public const string AddressZipCodeRegularExpression = "^d{4}$";
 
+        //Product Rating Constants
+
+        public const double ProductRatingMinValue = 1;
+        public const double ProductRatingMaxValue = 5;
+
+        public const int ProductCommentMinLength = 3;
+        public const int ProductCommentMaxLength = 500;
+
     }
 }

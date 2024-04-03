@@ -20,6 +20,13 @@ namespace MarketPlace.Controllers
         [HttpGet]
         public async Task<IActionResult> Add()
         {
+            string userId = GetUserId();
+
+            if (userId == null)
+            {
+                return Unauthorized();
+            }
+
             ProductFormModel model = new ProductFormModel()
             {
                 Categories = await data.Categories.Select(c => new ProductCategoryServiceModel()
@@ -61,6 +68,13 @@ namespace MarketPlace.Controllers
         }
         public async Task<IActionResult> All()
         {
+            string userId = GetUserId();
+
+            if (userId == null)
+            {
+                return Unauthorized();
+            }
+   
             var products = await data
                 .Products
                 .Select(p => new AllProductsModel()
@@ -80,6 +94,13 @@ namespace MarketPlace.Controllers
         }
         public async Task<IActionResult> Mine()
         {
+            string userId = GetUserId();
+
+            if (userId == null)
+            {
+                return Unauthorized();
+            }
+
             var products = await data
                 .Products
                 .Select(p => new AllProductsModel()

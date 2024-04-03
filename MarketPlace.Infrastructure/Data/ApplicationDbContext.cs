@@ -18,18 +18,17 @@ namespace MarketPlace.Infrastructure.Data
             builder.Entity<ProductBuyer>()
                 .HasKey(pb => new { pb.BuyerId, pb.ProductId });
 
-            builder.Entity<Product>()
-                 .HasOne(p => p.Category)
-                 .WithMany()
-                 .HasForeignKey(p => p.CategoryId)
-                 .OnDelete(DeleteBehavior.Restrict);
-
-            builder.Entity<Product>()
-                .HasOne(p => p.Seller)
+           builder.Entity<ProductBuyer>()
+                .HasOne(pb => pb.Buyer)
                 .WithMany()
-                .HasForeignKey(p => p.SellerId)
-                .OnDelete(DeleteBehavior.Restrict);
-           
+                .HasForeignKey(pb => pb.BuyerId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            builder.Entity<ProductBuyer>()
+                .HasOne(pb => pb.Product)
+                .WithMany()
+                .HasForeignKey(pb => pb.ProductId)
+                .OnDelete(DeleteBehavior.NoAction);
 
             builder.Entity<Category>()
                 .HasData(new Category { Id = 1, Name = "Electronics" },
@@ -49,5 +48,7 @@ namespace MarketPlace.Infrastructure.Data
         public DbSet<Category> Categories { get; set; } = null!;
 
         public DbSet<ProductBuyer> ProductBuyers { get; set; } = null!;
+
+        public DbSet<ProductRating> ProductRatings { get; set; } = null!;
     }
 }
