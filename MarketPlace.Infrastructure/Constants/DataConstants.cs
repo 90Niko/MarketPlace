@@ -25,7 +25,7 @@ namespace MarketPlace.Infrastructure.Constants
 
         public const string DateFormatWithTimeAndZone = "dd/MM/yyyy HH:mm:ss zzz";
 
-       //Category Constants
+        //Category Constants
         public const int CategoryNameMinLength = 3;
         public const int CategoryNameMaxLength = 50;
 
@@ -46,11 +46,22 @@ namespace MarketPlace.Infrastructure.Constants
 
         //Product Rating Constants
 
-        public const double ProductRatingMinValue = 1;
-        public const double ProductRatingMaxValue = 5;
+        public const int ProductRatingMinValue = 1;
+        public const int ProductRatingMaxValue = 5;
 
         public const int ProductCommentMinLength = 3;
         public const int ProductCommentMaxLength = 500;
+
+        //User Constants
+
+        public const int FirstNameMinLength = 3;
+        public const int FirstNameMaxLength = 50;
+
+
+        public const int LastNameMinLength = 3;
+        public const int LastNameMaxLength = 50;
+
+
 
     }
 }

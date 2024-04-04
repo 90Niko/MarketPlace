@@ -13,7 +13,7 @@ namespace MarketPlace.Infrastructure.Data.Models
         public string BuyerId { get; set; } = null!;
 
         [ForeignKey("BuyerId")]
-        public IdentityUser Buyer { get; set; } = null!;
+        public ApplicationUser Buyer { get; set; } = null!;
 
         [Key]
         [Comment("Product identifier")]

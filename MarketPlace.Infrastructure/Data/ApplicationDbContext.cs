@@ -5,7 +5,7 @@ using System.Reflection.Emit;
 
 namespace MarketPlace.Infrastructure.Data
 {
-    public class ApplicationDbContext : IdentityDbContext
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
@@ -22,13 +22,13 @@ namespace MarketPlace.Infrastructure.Data
                 .HasOne(pb => pb.Buyer)
                 .WithMany()
                 .HasForeignKey(pb => pb.BuyerId)
-                .OnDelete(DeleteBehavior.NoAction);
+                .OnDelete(DeleteBehavior.Restrict);
 
             builder.Entity<ProductBuyer>()
                 .HasOne(pb => pb.Product)
                 .WithMany()
                 .HasForeignKey(pb => pb.ProductId)
-                .OnDelete(DeleteBehavior.NoAction);
+                .OnDelete(DeleteBehavior.Restrict);
 
             builder.Entity<Category>()
                 .HasData(new Category { Id = 1, Name = "Electronics" },

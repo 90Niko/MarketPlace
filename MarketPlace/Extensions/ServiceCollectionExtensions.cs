@@ -1,4 +1,5 @@
 ﻿using MarketPlace.Infrastructure.Data;
+using MarketPlace.Infrastructure.Data.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -18,8 +19,7 @@ namespace MarketPlace.Extensions.DependencyInjection
             services.AddDbContext<ApplicationDbContext>(options =>
                            options.UseSqlServer(connectionString));
             services.AddDatabaseDeveloperPageExceptionFilter();
-
-            services.AddDatabaseDeveloperPageExceptionFilter();
+            services.AddMvc();
 
             return services;
         }
@@ -27,11 +27,17 @@ namespace MarketPlace.Extensions.DependencyInjection
         public static IServiceCollection AddAplicationIdentity(this IServiceCollection services, IConfiguration config)
         {
             services
-                .AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-                .AddEntityFrameworkStores<ApplicationDbContext>();
+           .AddIdentityCore<ApplicationUser>(options =>
+           {
+               options.SignIn.RequireConfirmedAccount = false;
+               options.Password.RequireDigit = false;
+               options.Password.RequireLowercase = false;
+               options.Password.RequireNonAlphanumeric = false;
+               options.Password.RequireUppercase = false;
+           })
+           .AddRoles<IdentityRole>()
+           .AddEntityFrameworkStores<ApplicationDbContext>();
             return services;
         }
-
-
     }
 }

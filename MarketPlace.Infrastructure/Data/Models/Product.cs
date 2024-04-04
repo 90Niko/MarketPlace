@@ -49,7 +49,7 @@ namespace MarketPlace.Infrastructure.Data.Models
 
         [Required]
         [ForeignKey("SellerId")]
-        public IdentityUser Seller { get; set; } = null!;
+        public ApplicationUser Seller { get; set; } = null!;
 
         [Required]
         [Comment("Product Category identifier")]
