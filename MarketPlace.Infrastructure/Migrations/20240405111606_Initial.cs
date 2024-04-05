@@ -65,22 +65,6 @@ namespace MarketPlace.Infrastructure.Migrations
                 comment: "This is the category of the product");
 
             migrationBuilder.CreateTable(
-                name: "ProductRatings",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false, comment: "Product rating identifier")
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Rating = table.Column<decimal>(type: "decimal(18,2)", nullable: false, comment: "This is the rating of the product"),
-                    Comment = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false, comment: "This is the comment of the product"),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, comment: "This is the date the product was rated"),
-                    UserId = table.Column<string>(type: "nvarchar(max)", nullable: false, comment: "User who submitted the rating")
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ProductRatings", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "ShipingAddresses",
                 columns: table => new
                 {
@@ -219,9 +203,9 @@ namespace MarketPlace.Infrastructure.Migrations
                     IsSold = table.Column<bool>(type: "bit", nullable: false),
                     IsApproved = table.Column<bool>(type: "bit", nullable: false),
                     Quantity = table.Column<int>(type: "int", nullable: false, comment: "This is the quantity of the product"),
+                    CartQuantity = table.Column<int>(type: "int", nullable: false),
                     SellerId = table.Column<string>(type: "nvarchar(450)", nullable: false, comment: "User identifier"),
                     CategoryId = table.Column<int>(type: "int", nullable: false, comment: "Product Category identifier"),
-                    ProductRatingId = table.Column<int>(type: "int", nullable: false, comment: "Product Rating identifier"),
                     ShipingAddressId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
@@ -237,12 +221,6 @@ namespace MarketPlace.Infrastructure.Migrations
                         name: "FK_Products_Categories_CategoryId",
                         column: x => x.CategoryId,
                         principalTable: "Categories",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Products_ProductRatings_ProductRatingId",
-                        column: x => x.ProductRatingId,
-                        principalTable: "ProductRatings",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
@@ -276,6 +254,29 @@ namespace MarketPlace.Infrastructure.Migrations
                         onDelete: ReferentialAction.Restrict);
                 },
                 comment: "This is the product buyer");
+
+            migrationBuilder.CreateTable(
+                name: "ProductRatings",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false, comment: "Product rating identifier")
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Rating = table.Column<int>(type: "int", nullable: false, comment: "This is the rating of the product"),
+                    Comment = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false, comment: "This is the comment of the product"),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, comment: "This is the date the product was rated"),
+                    UserId = table.Column<string>(type: "nvarchar(max)", nullable: false, comment: "User who submitted the rating"),
+                    ProductId = table.Column<int>(type: "int", nullable: false, comment: "Product identifier")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ProductRatings", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ProductRatings_Products_ProductId",
+                        column: x => x.ProductId,
+                        principalTable: "Products",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
 
             migrationBuilder.InsertData(
                 table: "Categories",
@@ -336,14 +337,14 @@ namespace MarketPlace.Infrastructure.Migrations
                 column: "ProductId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_ProductRatings_ProductId",
+                table: "ProductRatings",
+                column: "ProductId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Products_CategoryId",
                 table: "Products",
                 column: "CategoryId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Products_ProductRatingId",
-                table: "Products",
-                column: "ProductRatingId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Products_SellerId",
@@ -377,6 +378,9 @@ namespace MarketPlace.Infrastructure.Migrations
                 name: "ProductBuyers");
 
             migrationBuilder.DropTable(
+                name: "ProductRatings");
+
+            migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
@@ -387,9 +391,6 @@ namespace MarketPlace.Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "Categories");
-
-            migrationBuilder.DropTable(
-                name: "ProductRatings");
 
             migrationBuilder.DropTable(
                 name: "ShipingAddresses");

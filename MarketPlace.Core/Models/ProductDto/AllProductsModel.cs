@@ -23,5 +23,9 @@ namespace MarketPlace.Core.Models.ProductDto
         public string Seller { get; set; } = null!;
 
         public string Category { get; set; } = null!;
+
+        public string Quantity { get; set; } = null!;
+
+        public int Rating { get; set; }
     }
 }

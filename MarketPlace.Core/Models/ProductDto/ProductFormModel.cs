@@ -22,9 +22,11 @@ namespace MarketPlace.Core.Models.ProductDto
         [Required(ErrorMessage = MessageConstants.RequiredMessage)]
         public string Image { get; set; } = null!;
 
-        public DateTime CreatedOn { get; set; }
+        [Required(ErrorMessage = MessageConstants.RequiredMessage)]
+        [Range(DataConstants.ProductQuantityMinValue, DataConstants.ProductQuantityMaxValue)]
+        [Display(Name = "Quantity")]
+        public int Quantity { get; set; }
 
-        public string Seller { get; set; } = null!;
 
         [Display(Name = "Category")]
         public int CategoryId{ get; set; }

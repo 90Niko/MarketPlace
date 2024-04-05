@@ -19,6 +19,8 @@ namespace MarketPlace.Core.Models.CartDto
 
         public string Category { get; set; } = null!;
 
+        public int CartQuantity { get; set; }
+
         public string Seller { get; set; } = null!;
 
 

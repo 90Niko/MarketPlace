@@ -12,14 +12,14 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MarketPlace.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240404190752_Initial")]
+    [Migration("20240405111606_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.27")
+                .HasAnnotation("ProductVersion", "6.0.28")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
@@ -167,6 +167,9 @@ namespace MarketPlace.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
+                    b.Property<int>("CartQuantity")
+                        .HasColumnType("int");
+
                     b.Property<int>("CategoryId")
                         .HasColumnType("int")
                         .HasComment("Product Category identifier");
@@ -202,11 +205,6 @@ namespace MarketPlace.Infrastructure.Migrations
                         .HasColumnType("decimal(18,2)")
                         .HasComment("This is the price of the product");
 
-                    b.Property<int?>("ProductRatingId")
-                        .IsRequired()
-                        .HasColumnType("int")
-                        .HasComment("Product Rating identifier");
-
                     b.Property<int>("Quantity")
                         .HasColumnType("int")
                         .HasComment("This is the quantity of the product");
@@ -222,8 +220,6 @@ namespace MarketPlace.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CategoryId");
-
-                    b.HasIndex("ProductRatingId");
 
                     b.HasIndex("SellerId");
 
@@ -270,8 +266,12 @@ namespace MarketPlace.Infrastructure.Migrations
                         .HasColumnType("datetime2")
                         .HasComment("This is the date the product was rated");
 
-                    b.Property<decimal>("Rating")
-                        .HasColumnType("decimal(18,2)")
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int")
+                        .HasComment("Product identifier");
+
+                    b.Property<int>("Rating")
+                        .HasColumnType("int")
                         .HasComment("This is the rating of the product");
 
                     b.Property<string>("UserId")
@@ -280,6 +280,8 @@ namespace MarketPlace.Infrastructure.Migrations
                         .HasComment("User who submitted the rating");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
 
                     b.ToTable("ProductRatings");
                 });
@@ -478,12 +480,6 @@ namespace MarketPlace.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("MarketPlace.Infrastructure.Data.Models.ProductRating", "ProductRating")
-                        .WithMany()
-                        .HasForeignKey("ProductRatingId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("MarketPlace.Infrastructure.Data.Models.ApplicationUser", "Seller")
                         .WithMany()
                         .HasForeignKey("SellerId")
@@ -495,8 +491,6 @@ namespace MarketPlace.Infrastructure.Migrations
                         .HasForeignKey("ShipingAddressId");
 
                     b.Navigation("Category");
-
-                    b.Navigation("ProductRating");
 
                     b.Navigation("Seller");
                 });
@@ -516,6 +510,17 @@ namespace MarketPlace.Infrastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("Buyer");
+
+                    b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("MarketPlace.Infrastructure.Data.Models.ProductRating", b =>
+                {
+                    b.HasOne("MarketPlace.Infrastructure.Data.Models.Product", "Product")
+                        .WithMany("productRatings")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Product");
                 });
@@ -569,6 +574,11 @@ namespace MarketPlace.Infrastructure.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("MarketPlace.Infrastructure.Data.Models.Product", b =>
+                {
+                    b.Navigation("productRatings");
                 });
 
             modelBuilder.Entity("MarketPlace.Infrastructure.Data.Models.ShipingAddress", b =>

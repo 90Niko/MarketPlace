@@ -43,6 +43,8 @@ namespace MarketPlace.Infrastructure.Data.Models
         [Comment("This is the quantity of the product")]
         public int Quantity { get; set; }
 
+        public int CartQuantity { get; set; } = 0;
+
         [Required]
         [Comment("User identifier")]
         public string SellerId { get; set; } = string.Empty;
@@ -59,11 +61,8 @@ namespace MarketPlace.Infrastructure.Data.Models
         [ForeignKey("CategoryId")]
         public Category Category { get; set; } = null!;
 
-        [Comment("Product Rating identifier")]
-        public int? ProductRatingId { get; set; }
+        public ICollection<ProductRating> productRatings { get; set; } = new List<ProductRating>();
 
-        [ForeignKey("ProductRatingId")]
-        public ProductRating ProductRating { get; set; } = null!;
 
         // public int ShipingAddressId { get; set; }
     }

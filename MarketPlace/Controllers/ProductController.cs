@@ -20,13 +20,7 @@ namespace MarketPlace.Controllers
         [HttpGet]
         public async Task<IActionResult> Add()
         {
-            string userId = GetUserId();
-
-            if (userId == null)
-            {
-                return Unauthorized();
-            }
-
+            
             ProductFormModel model = new ProductFormModel()
             {
                 Categories = await data.Categories.Select(c => new ProductCategoryServiceModel()
@@ -50,6 +44,18 @@ namespace MarketPlace.Controllers
                 return Unauthorized();
             }
 
+            if (!ModelState.IsValid)
+            {
+                model.Categories = await data.Categories.Select(c => new ProductCategoryServiceModel()
+                {
+                    Id = c.Id,
+                    Name = c.Name
+
+                }).ToListAsync();
+
+                return View(model);
+            }
+
             var newProduct = new Product
             {
                 Name = model.Name,
@@ -58,7 +64,8 @@ namespace MarketPlace.Controllers
                 Image = model.Image,
                 CreatedOn = DateTime.Now,
                 SellerId = userId,
-                CategoryId = model.CategoryId
+                CategoryId = model.CategoryId,
+                Quantity = model.Quantity
             };
 
             await data.Products.AddAsync(newProduct);
@@ -74,9 +81,10 @@ namespace MarketPlace.Controllers
             {
                 return Unauthorized();
             }
-   
+
             var products = await data
                 .Products
+                .Include(p=>p.productRatings)
                 .Select(p => new AllProductsModel()
                 {
                     Id = p.Id,
@@ -86,7 +94,10 @@ namespace MarketPlace.Controllers
                     Image = p.Image,
                     CreatedOn = p.CreatedOn.ToString("dd/MM/yyyy"),
                     Seller = p.Seller.UserName,
-                    Category = p.Category.Name
+                    Category = p.Category.Name,
+                    Quantity = p.Quantity.ToString(),
+                    Rating = p.productRatings.Count
+                    
                 })
                .ToListAsync();
 
@@ -166,6 +177,7 @@ namespace MarketPlace.Controllers
                 Price = product.Price,
                 Image = product.Image,
                 CategoryId = product.CategoryId,
+                Quantity = product.Quantity,
                 Categories = GetCategories()
             };
 
@@ -193,6 +205,7 @@ namespace MarketPlace.Controllers
             product.Description = model.Description;
             product.Price = model.Price;
             product.Image = model.Image;
+            product.Quantity = model.Quantity;
             product.CategoryId = model.CategoryId;
 
             await data.SaveChangesAsync();

@@ -36,6 +36,7 @@ namespace MarketPlace.Controllers
                    ProductName = p.Product.Name,
                    ProductPrice = p.Product.Price,
                    Seller = p.Product.Seller.UserName,
+                   CartQuantity = p.Product.CartQuantity,
                    Category = p.Product.Category.Name
                }
                ).ToListAsync();
@@ -46,25 +47,31 @@ namespace MarketPlace.Controllers
         public async Task<IActionResult> AddTocart(int id)
         {
             var productToAdd = await data.Products.FindAsync(id);
-    
+
+
+
             if (productToAdd == null)
             {
                 return BadRequest();
             }
+
+            productToAdd.CartQuantity++;
+            productToAdd.Quantity--;
+
             string userId = GetUserId();
 
             if (productToAdd.SellerId == userId)
             {
-              return BadHttpRequestException("You can't buy your own product!");
+                return BadHttpRequestException("You can't buy your own product!");
             }
 
-          var checkProduct = await data.ProductBuyers
-                .Where(p => p.ProductId == productToAdd.Id && p.BuyerId == userId)
-                .FirstOrDefaultAsync();
+            var checkProduct = await data.ProductBuyers
+                  .Where(p => p.ProductId == productToAdd.Id && p.BuyerId == userId)
+                  .FirstOrDefaultAsync();
 
             if (checkProduct != null)
             {
-               return BadHttpRequestException("You already have this product in your cart!");
+                return BadHttpRequestException("You already have this product in your cart!");
             }
 
             var productBuyer = new ProductBuyer
@@ -81,7 +88,7 @@ namespace MarketPlace.Controllers
 
         private IActionResult BadHttpRequestException(string v)
         {
-           
+
             var badRequest = new BadRequestObjectResult(v);
 
             return badRequest;
@@ -117,7 +124,7 @@ namespace MarketPlace.Controllers
                 .Where(p => p.ProductId == model.Id && p.BuyerId == userId)
                 .FirstOrDefaultAsync();
 
-         
+
             return View(productToRemove);
         }
 
@@ -127,11 +134,20 @@ namespace MarketPlace.Controllers
             var productToRemove = await data.ProductBuyers
                 .Where(p => p.ProductId == id && p.BuyerId == GetUserId())
                 .FirstOrDefaultAsync();
-            
+
+            var product = await data.Products.FindAsync(id);
+
+            if (product == null)
+            {
+                return BadRequest();
+            }
+
             if (productToRemove == null)
             {
                 return BadRequest();
             }
+            product.Quantity++;
+            product.CartQuantity--;
 
             data.ProductBuyers.Remove(productToRemove);
             data.SaveChanges();
@@ -176,7 +192,7 @@ namespace MarketPlace.Controllers
             {
                 return BadRequest();
             }
-            
+
             data.ShipingAddresses.Add(address);
             data.SaveChanges();
 

@@ -17,10 +17,8 @@ namespace MarketPlace.Infrastructure.Data.Models
         public int Id { get; set; }
 
         [Required]
-        [Range(1, 5)]
-        [Column(TypeName = "decimal(18,2)")]
         [Comment("This is the rating of the product")]
-        public double Rating { get; set; }
+        public int Rating { get; set; }
 
         [Required]
         [StringLength(ProductCommentMaxLength)]
@@ -34,6 +32,12 @@ namespace MarketPlace.Infrastructure.Data.Models
         [Required]
         [Comment("User who submitted the rating")]
         public string UserId { get; set; } = string.Empty;
+
+        [Comment("Product identifier")]
+        public int ProductId { get; set; }
+
+        [ForeignKey("ProductId")]
+        public Product Product { get; set; } = null!;
 
     }
 }
