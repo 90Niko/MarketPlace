@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MarketPlace.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240405111606_Initial")]
+    [Migration("20240408101239_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -97,6 +97,26 @@ namespace MarketPlace.Infrastructure.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "f5563c5e-d780-4bce-812d-408f2c079ae2",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "666a211f-6b9f-47a0-a85b-f99f3e859e6c",
+                            Email = "admin@mail.com",
+                            EmailConfirmed = false,
+                            FirstName = "Great",
+                            LastName = "Admin",
+                            LockoutEnabled = false,
+                            NormalizedEmail = "admin@mail.com",
+                            NormalizedUserName = "admin@mail.com",
+                            PasswordHash = "AQAAAAEAACcQAAAAEIanXkgy+TI+aPDN/p+kbVsA23CT8k5jC2ohiqVefwLdHhAHte3c892imTML+/vV/Q==",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "fb1fc9d3-2d24-4481-a5f2-04a615dc02ba",
+                            TwoFactorEnabled = false,
+                            UserName = "admin@mail.com"
+                        });
                 });
 
             modelBuilder.Entity("MarketPlace.Infrastructure.Data.Models.Category", b =>
@@ -123,38 +143,18 @@ namespace MarketPlace.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = 1,
-                            Name = "Electronics"
-                        },
-                        new
-                        {
                             Id = 2,
                             Name = "Clothing"
                         },
                         new
                         {
+                            Id = 1,
+                            Name = "Electronics"
+                        },
+                        new
+                        {
                             Id = 3,
-                            Name = "Furniture"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Name = "Books"
-                        },
-                        new
-                        {
-                            Id = 5,
                             Name = "Home and Garten"
-                        },
-                        new
-                        {
-                            Id = 6,
-                            Name = "Sport"
-                        },
-                        new
-                        {
-                            Id = 7,
-                            Name = "Toys"
                         });
                 });
 

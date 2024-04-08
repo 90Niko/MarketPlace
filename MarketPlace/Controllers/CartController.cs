@@ -48,8 +48,6 @@ namespace MarketPlace.Controllers
         {
             var productToAdd = await data.Products.FindAsync(id);
 
-
-
             if (productToAdd == null)
             {
                 return BadRequest();
@@ -88,7 +86,6 @@ namespace MarketPlace.Controllers
 
         private IActionResult BadHttpRequestException(string v)
         {
-
             var badRequest = new BadRequestObjectResult(v);
 
             return badRequest;

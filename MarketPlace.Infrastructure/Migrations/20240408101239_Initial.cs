@@ -279,17 +279,18 @@ namespace MarketPlace.Infrastructure.Migrations
                 });
 
             migrationBuilder.InsertData(
+                table: "AspNetUsers",
+                columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "FirstName", "LastName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
+                values: new object[] { "f5563c5e-d780-4bce-812d-408f2c079ae2", 0, "666a211f-6b9f-47a0-a85b-f99f3e859e6c", "admin@mail.com", false, "Great", "Admin", false, null, "admin@mail.com", "admin@mail.com", "AQAAAAEAACcQAAAAEIanXkgy+TI+aPDN/p+kbVsA23CT8k5jC2ohiqVefwLdHhAHte3c892imTML+/vV/Q==", null, false, "fb1fc9d3-2d24-4481-a5f2-04a615dc02ba", false, "admin@mail.com" });
+
+            migrationBuilder.InsertData(
                 table: "Categories",
                 columns: new[] { "Id", "Name" },
                 values: new object[,]
                 {
                     { 1, "Electronics" },
                     { 2, "Clothing" },
-                    { 3, "Furniture" },
-                    { 4, "Books" },
-                    { 5, "Home and Garten" },
-                    { 6, "Sport" },
-                    { 7, "Toys" }
+                    { 3, "Home and Garten" }
                 });
 
             migrationBuilder.CreateIndex(
