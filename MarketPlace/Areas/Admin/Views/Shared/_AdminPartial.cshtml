@@ -16,23 +16,12 @@
 <ul class="navbar-nav">
     @if (SignInManager.IsSignedIn(User))
     {
-        <form class="d-flex">
-            <button class="btn btn-outline-dark" asp-area="" asp-controller="Cart" asp-action="Cart" type="submit">
-                <i class="bi-cart-fill me-1"></i>
-                Cart
-                <span class="badge bg-dark text-white ms-1 rounded-pill"></span>
-            </button>
-        </form>
         <li class="nav-item">
-            <a class="btn btn-outline-dark mt-auto" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @userName!</a>
-
+            <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @userName!</a>
         </li>
-
-        <form class="text-center" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-            <button class="btn btn-outline-dark mt-auto" type="submit">
-                Log out
-            </button>
-        </form>
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index" title="Back">Public Interface</a>
+        </li>
     }
     else
     {

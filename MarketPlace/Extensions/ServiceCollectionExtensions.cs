@@ -7,13 +7,13 @@ namespace MarketPlace.Extensions.DependencyInjection
 {
     public static class ServiceCollectionExtensions
     {
-        public static IServiceCollection AddAplicationServices(this IServiceCollection services)
+        public static IServiceCollection AddApplicationServices(this IServiceCollection services)
         {
             return services;
 
         }
 
-        public static IServiceCollection AddAplicationDbContext(this IServiceCollection services, IConfiguration config)
+        public static IServiceCollection AddApplicationDbContext(this IServiceCollection services, IConfiguration config)
         {
             var connectionString = config.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
             services.AddDbContext<ApplicationDbContext>(options =>
@@ -24,7 +24,7 @@ namespace MarketPlace.Extensions.DependencyInjection
             return services;
         }
 
-        public static IServiceCollection AddAplicationIdentity(this IServiceCollection services, IConfiguration config)
+        public static IServiceCollection AddApplicationIdentity(this IServiceCollection services, IConfiguration config)
         {
             services
            .AddIdentityCore<ApplicationUser>(options =>

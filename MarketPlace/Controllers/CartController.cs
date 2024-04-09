@@ -84,7 +84,7 @@ namespace MarketPlace.Controllers
             return RedirectToAction(nameof(Cart));
         }
 
-        private IActionResult BadHttpRequestException(string v)
+        private static IActionResult BadHttpRequestException(string v)
         {
             var badRequest = new BadRequestObjectResult(v);
 
@@ -155,7 +155,7 @@ namespace MarketPlace.Controllers
         [HttpGet]
         public async Task<IActionResult> AddAddress()
         {
-            AddressFormModel model = new AddressFormModel()
+            AddressFormModel model = new ()
             {
                 Products = await data.ProductBuyers.Where(p => p.BuyerId == GetUserId()).Select(p => p.Product).ToListAsync()
             };
