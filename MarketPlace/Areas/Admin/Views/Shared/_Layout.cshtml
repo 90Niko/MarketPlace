@@ -20,14 +20,12 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                   @*  ﻿
-                    <ul class="navbar-nav flex-grow-1">
+                    <ul>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="Admin" asp-controller="Home" asp-action="ForReview">For Review</a>
+                            <a class="nav-link text-dark" asp-area="Admin" asp-controller="Home" asp-action="ForReview">All Users</a>
                         </li>
-
-                    </ul> *@
-                    @await Component.InvokeAsync(nameof(MainMenuComponent))
+                    </ul> 
+                    @* @await Component.InvokeAsync(nameof(AdminMenuCompnent)) *@
                     <partial name="_AdminPartial" />
                 </div>
             </div>
@@ -38,7 +36,6 @@
             @RenderBody()
         </main>
     </div>
-
     <footer class="border-top footer text-muted">
         <div class="container">
             &copy; @DateTime.Now.Year - MarketPlace <span class="text-danger">This area is only for Administrators!</span>

@@ -20,7 +20,7 @@ namespace MarketPlace.Controllers
         [HttpGet]
         public async Task<IActionResult> Add()
         {
-            
+
             ProductFormModel model = new ProductFormModel()
             {
                 Categories = await data.Categories.Select(c => new ProductCategoryServiceModel()
@@ -84,7 +84,8 @@ namespace MarketPlace.Controllers
 
             var products = await data
                 .Products
-                .Include(p=>p.productRatings)
+                .Include(p => p.productRatings)
+                .Where(p => p.IsApproved == true)
                 .Select(p => new AllProductsModel()
                 {
                     Id = p.Id,
@@ -96,8 +97,8 @@ namespace MarketPlace.Controllers
                     Seller = p.Seller.UserName,
                     Category = p.Category.Name,
                     Quantity = p.Quantity.ToString(),
-                    Rating = p.productRatings.Count
-                    
+                    Rating = p.productRatings.Count > 0 ? (int)p.productRatings.Average(r => r.Rating) : 0
+
                 })
                .ToListAsync();
 

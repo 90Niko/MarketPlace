@@ -1,6 +1,7 @@
 ﻿@using MarketPlace.Infrastructure.Data.Models
 @using Microsoft.AspNetCore.Identity
 @using System.Security.Claims
+@using static MarketPlace.Extensions.ClaimPrincipalExtensions
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
 
@@ -9,9 +10,12 @@
 
     if (SignInManager.IsSignedIn(User))
     {
-        userName = User.FindFirstValue(MarketPlace.Infrastructure.Constants.CustomClaims.UserFullNameClaim) ?? string.Empty;
+        var user = await UserManager.FindByIdAsync(User.Id());
+
+        userName = $"{user.FirstName} {user.LastName}";
     }
 }
+
 
 <ul class="navbar-nav">
     @if (SignInManager.IsSignedIn(User))
