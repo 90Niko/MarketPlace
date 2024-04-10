@@ -23,17 +23,15 @@ namespace MarketPlace.Areas.Identity.Pages.Account
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly ILogger<LoginModel> _logger;
         private readonly UserManager<ApplicationUser> _userManager;
-        private readonly RoleManager<IdentityRole> _roleManager;
-
+      
         public LoginModel(SignInManager<ApplicationUser> signInManager,
             ILogger<LoginModel> logger,
-            UserManager<ApplicationUser> userManager,
-            RoleManager<IdentityRole> roleManager)
+            UserManager<ApplicationUser> userManager
+            )
         {
             _signInManager = signInManager;
             _logger = logger;
             _userManager = userManager;
-            _roleManager = roleManager;
         }
 
         /// <summary>
@@ -122,7 +120,7 @@ namespace MarketPlace.Areas.Identity.Pages.Account
                 var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
-                    var user = await _userManager.FindByEmailAsync(Input.Email);
+                    var user = await _userManager.FindByNameAsync(Input.Email);
 
                     _logger.LogInformation("User logged in.");
 
@@ -132,6 +130,7 @@ namespace MarketPlace.Areas.Identity.Pages.Account
                     }
 
                     return LocalRedirect(returnUrl);
+
                 }
                 if (result.RequiresTwoFactor)
                 {

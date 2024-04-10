@@ -53,6 +53,28 @@ namespace MarketPlace.Areas.Admin.Controllers
 
         }
 
+        public IActionResult AddCategory()
+        {
+            CategoryServiceModel model = new CategoryServiceModel();
+            return View(model);
+        }
+       
+        public async Task<IActionResult> AddCategory(CategoryServiceModel model)
+        {
+            var category = new Category
+            {
+                Id = model.Id,
+                Name = model.Name
+            };
+
+            data.Categories.Add(category);
+            await data.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Dashboard));
+        }
+
+
+
         //[HttpPost]
         //public async Task<IActionResult> ForReview(int id)
         //{
