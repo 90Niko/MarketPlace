@@ -1,0 +1,41 @@
+﻿@using MarketPlace.Areas.Admin.Models.User
+
+@model ICollection<UserServiceModel>
+
+@{
+    ViewBag.Title = "All Users";
+}
+
+<h2 class="text-center">@ViewBag.Title</h2>
+<hr />
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>
+                <label>First Name</label>
+            </th>
+            <th>
+                <label>Last Name</label>
+            </th>
+            <th>
+                <label>Email Address</label>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model)
+        {
+            <tr>
+                <td>
+                    <label>@user.FirstName</label>
+                </td>
+                <td>
+                    <label>@user.LastName</label>
+                </td>
+                <td>
+                    <label>@user.Email</label>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
