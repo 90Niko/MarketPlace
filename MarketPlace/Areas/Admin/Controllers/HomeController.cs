@@ -50,20 +50,32 @@ namespace MarketPlace.Areas.Admin.Controllers
             await data.SaveChangesAsync();
 
             return RedirectToAction(nameof(Dashboard));
-
         }
 
-        public IActionResult AddCategory()
+        [HttpGet]
+        public async Task<IActionResult> AddCategory()
         {
-            CategoryServiceModel model = new CategoryServiceModel();
-            return View(model);
+          return View();
         }
-       
+
+        [HttpPost]
         public async Task<IActionResult> AddCategory(CategoryServiceModel model)
         {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            List<Category> categories = await data.Categories.ToListAsync();
+
+            if (categories.Any(c => c.Name == model.Name))
+            {
+                ModelState.AddModelError(nameof(model.Name), "Category already exists.");
+                return View(model);
+            }
+
             var category = new Category
             {
-                Id = model.Id,
                 Name = model.Name
             };
 
@@ -72,8 +84,6 @@ namespace MarketPlace.Areas.Admin.Controllers
 
             return RedirectToAction(nameof(Dashboard));
         }
-
-
 
         //[HttpPost]
         //public async Task<IActionResult> ForReview(int id)

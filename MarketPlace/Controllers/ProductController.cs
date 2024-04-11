@@ -1,4 +1,6 @@
-﻿using MarketPlace.Core.Models.ProductDto;
+﻿using MarketPlace.Core.Contracts;
+using MarketPlace.Core.Models;
+using MarketPlace.Core.Models.ProductDto;
 using MarketPlace.Infrastructure.Data;
 using MarketPlace.Infrastructure.Data.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -11,10 +13,12 @@ namespace MarketPlace.Controllers
     public class ProductController : BaseController
     {
         private readonly ApplicationDbContext data;
-        public ProductController(ApplicationDbContext data)
+        private readonly IProductService productService;
+        public ProductController(ApplicationDbContext data, IProductService productService)
               : base(data)
         {
             this.data = data;
+            this.productService = productService;
         }
 
         [HttpGet]
@@ -73,36 +77,21 @@ namespace MarketPlace.Controllers
 
             return RedirectToAction(nameof(All));
         }
-        public async Task<IActionResult> All()
+        public async Task<IActionResult> All([FromQuery] AllProductQueryModel query)
         {
-            string userId = GetUserId();
+            var model = await productService.AllAsync(
+                query.Category,
+                query.SearchTerm,
+                query.Sorting,
+                query.CurrentPage,
+                AllProductQueryModel.ProductsPerPage);
 
-            if (userId == null)
-            {
-                return Unauthorized();
-            }
+            query.TotalProductsCount = model.TotalProductsCount;
+            query.Products = model.Products;
+            query.Categories = await data.Categories.Select(c => c.Name).ToListAsync();
 
-            var products = await data
-                .Products
-                .Include(p => p.productRatings)
-                .Where(p => p.IsApproved == true)
-                .Select(p => new AllProductsModel()
-                {
-                    Id = p.Id,
-                    Description = p.Description,
-                    Name = p.Name,
-                    Price = (decimal)p.Price,
-                    Image = p.Image,
-                    CreatedOn = p.CreatedOn.ToString("dd/MM/yyyy"),
-                    Seller = p.Seller.UserName,
-                    Category = p.Category.Name,
-                    Quantity = p.Quantity.ToString(),
-                    Rating = p.productRatings.Count > 0 ? (int)p.productRatings.Average(r => r.Rating) : 0
+            return View(query);
 
-                })
-               .ToListAsync();
-
-            return View(products);
         }
         public async Task<IActionResult> Mine()
         {

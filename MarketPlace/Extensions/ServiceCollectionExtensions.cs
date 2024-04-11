@@ -1,4 +1,6 @@
-﻿using MarketPlace.Infrastructure.Data;
+﻿using MarketPlace.Core.Contracts;
+using MarketPlace.Core.Services;
+using MarketPlace.Infrastructure.Data;
 using MarketPlace.Infrastructure.Data.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -20,6 +22,7 @@ namespace MarketPlace.Extensions.DependencyInjection
                            options.UseSqlServer(connectionString));
             services.AddDatabaseDeveloperPageExceptionFilter();
             services.AddMvc();
+            services.AddScoped<IProductService, ProductService>();
 
             return services;
         }

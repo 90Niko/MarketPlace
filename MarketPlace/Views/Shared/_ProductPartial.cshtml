@@ -1,0 +1,37 @@
+﻿@using MarketPlace.Core.Models
+
+@model AllProductsModel
+
+<div class="text-center row">
+
+
+    <div class="card col-4 " style="width: 15rem;">
+        <div class="card-body">
+            <h5 class="card-title mt-1">@Model.Name</h5>
+            <img class="card-img-top" src=@Model.Image alt="Product Image" style="width:128px;height:128px;">
+            <p class="mb-0"><span class="fw-bold">Added on: </span>@Model.CreatedOn</p>
+            <p class="mb-0"><span class="fw-bold">Category: </span>@Model.Category</p>
+            @*  <p class="mb-0"><span class="fw-bold">Description: </span>@a.Description</p> *@
+            <p class="mb-0"><span class="fw-bold">Price: </span>@Model.Price Euro</p>
+            <p class="mb-0"><span class="fw-bold">Seller: </span>@Model.Seller</p>
+            <p class="mb-0"><span class="fw-bold">Quantity: </span>@Model.Quantity</p>
+            <p class="mb-0"><span class="fw-bold">Rating: </span>@Model.Rating</p>
+        </div>
+
+        @if (User.Identity.Name == Model.Seller)
+        {
+            <a asp-controller="Product" asp-action="Edit" asp-route-id="@Model.Id" class="fs-6 btn btn-outline-dark mb-3 w-100 p-3 fw-bold">Edit</a>
+            <a asp-controller="Product" asp-action="Delete" asp-route-id="@Model.Id" class="fs-6 btn btn-outline-danger mb-3 w-100 p-3 fw-bold">Delete</a>
+        }
+        else
+        {
+            <form class="input-group-sm" asp-controller="Cart" asp-action="AddToCart" asp-route-id="@Model.Id">
+                <input type="submit" value="Add to Cart" class="fs-6 btn btn-outline-success mb-3 w-100 p-3 fw-bold" />
+            </form>
+            <form class="input-group-sm" asp-controller="Cart" asp-action="AddToCart" asp-route-id="@Model.Id">
+                <input type="submit" value="Details" class="fs-6 btn btn-outline-success mb-3 w-100 p-3 fw-bold" />
+            </form>
+        }
+    </div>
+
+</div>
