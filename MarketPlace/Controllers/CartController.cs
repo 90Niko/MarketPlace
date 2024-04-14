@@ -1,5 +1,6 @@
 ﻿using MarketPlace.Core.Models.AddressDto;
 using MarketPlace.Core.Models.CartDto;
+using MarketPlace.Core.Models.OrderInfoDto;
 using MarketPlace.Infrastructure.Data;
 using MarketPlace.Infrastructure.Data.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -53,9 +54,6 @@ namespace MarketPlace.Controllers
                 return BadRequest();
             }
 
-            productToAdd.CartQuantity++;
-            productToAdd.Quantity--;
-
             string userId = GetUserId();
 
             if (productToAdd.SellerId == userId)
@@ -72,14 +70,26 @@ namespace MarketPlace.Controllers
                 return BadHttpRequestException("You already have this product in your cart!");
             }
 
+            var address = await data.ShipingAddresses
+                .Where(p => p.UserId == userId)
+                .FirstOrDefaultAsync();
+            if (address == null)
+            {
+                return RedirectToAction(nameof(AddAddress));
+            }
+
             var productBuyer = new ProductBuyer
             {
                 ProductId = productToAdd.Id,
                 BuyerId = userId,
+                ShipingAddressId = address.Id,
             };
+            productToAdd.CartQuantity = 1;
+            productToAdd.Quantity--;
 
-            data.ProductBuyers.Add(productBuyer);
-            data.SaveChanges();
+
+            await data.ProductBuyers.AddAsync(productBuyer);
+            await data.SaveChangesAsync();
 
             return RedirectToAction(nameof(Cart));
         }
@@ -94,16 +104,60 @@ namespace MarketPlace.Controllers
         public async Task<IActionResult> Buy(string buyerId)
         {
             buyerId = GetUserId();
-            List<ProductBuyer> products = await data.ProductBuyers
-                 .Where(p => p.BuyerId == buyerId)
-                 .ToListAsync();
+
+            var products = await data.ProductBuyers
+                .Where(p => p.BuyerId == buyerId)
+                .ToListAsync();
+
+            
+            var sellerId = await data.Products.Select(p => p.SellerId).FirstOrDefaultAsync();
+
+            if (sellerId == null)
+            {
+                return BadRequest();
+            }
+
+            var address = await data.ShipingAddresses
+                .Where(p => p.UserId == buyerId)
+                .FirstOrDefaultAsync();
+
+            if (address == null)
+            {
+                return RedirectToAction(nameof(AddAddress));
+            }
+
+            if (products == null)
+            {
+                return BadRequest();
+            }
+
+            var productNames = await data.ProductBuyers
+                .Where(p => p.BuyerId == buyerId)
+                .Select(p => p.Product.Name)
+                .ToListAsync();
+
+            if (productNames == null)
+            {
+                return BadRequest();
+            }
+
+            var order = new Order
+            {
+                BuyerId = buyerId,
+                SellerId = sellerId,
+                OrderDate = DateTime.Now,
+                ShipingAddress = address.Street + " " + address.City + " " + address.Country + " " + address.ZipCode,
+                ProductName = string.Join(", ", productNames)
+
+            };
 
             foreach (var product in products)
             {
                 data.ProductBuyers.Remove(product);
             }
 
-            data.SaveChanges();
+            await data.Orders.AddAsync(order);
+            await data.SaveChangesAsync();
 
             return RedirectToAction(nameof(Cart));
         }
@@ -144,7 +198,7 @@ namespace MarketPlace.Controllers
                 return BadRequest();
             }
             product.Quantity++;
-            product.CartQuantity--;
+
 
             data.ProductBuyers.Remove(productToRemove);
             data.SaveChanges();
@@ -155,7 +209,7 @@ namespace MarketPlace.Controllers
         [HttpGet]
         public async Task<IActionResult> AddAddress()
         {
-            AddressFormModel model = new ()
+            AddressFormModel model = new()
             {
                 Products = await data.ProductBuyers.Where(p => p.BuyerId == GetUserId()).Select(p => p.Product).ToListAsync()
             };
@@ -182,7 +236,7 @@ namespace MarketPlace.Controllers
                 ZipCode = model.ZipCode,
                 Street = model.Street,
                 UserId = userId,
-                Products = await data.ProductBuyers.Where(p => p.BuyerId == userId).Select(p => p.Product).ToListAsync()
+
             };
 
             if (address == null)
@@ -194,6 +248,37 @@ namespace MarketPlace.Controllers
             data.SaveChanges();
 
             return RedirectToAction(nameof(Cart));
+        }
+
+        public async Task<IActionResult> OrderInfo()
+        {
+            var userId = GetUserId();
+
+            if (userId == null)
+            {
+                return Unauthorized();
+            }
+
+            var date = await data.Orders
+                .Where(p => p.BuyerId == userId)
+                .Select(p => p.OrderDate)
+                .FirstOrDefaultAsync();
+
+            var orderInfo = await data.ProductBuyers
+             .Include(p => p.ShipingAddress)
+             .Where(p => p.BuyerId == userId)
+             .Select(p => new OrderInfoModel()
+             {
+                 BuyerId = p.BuyerId,
+                 Address = p.ShipingAddress.Street + " " + p.ShipingAddress.City + " " + p.ShipingAddress.Country + " " + p.ShipingAddress.ZipCode,
+                 ProductName = p.Product.Name,
+                 Price = p.Product.Price.ToString(),
+                 Date = date.ToString()
+
+             }).ToListAsync();
+
+
+            return View(orderInfo);
         }
     }
 }

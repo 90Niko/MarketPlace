@@ -17,7 +17,7 @@ namespace MarketPlace.Infrastructure.Data
         {
 
             builder.Entity<ProductBuyer>()
-                .HasKey(pb => new { pb.BuyerId, pb.ProductId });
+                .HasKey(pb => new { pb.BuyerId, pb.ProductId, pb.ShipingAddressId });
 
             builder.Entity<ProductBuyer>()
                  .HasOne(pb => pb.Buyer)
@@ -31,14 +31,22 @@ namespace MarketPlace.Infrastructure.Data
                 .HasForeignKey(pb => pb.ProductId)
                 .OnDelete(DeleteBehavior.Restrict);
 
+            builder.Entity<ProductBuyer>()
+                .HasOne(pb => pb.ShipingAddress)
+                .WithMany()
+                .HasForeignKey(pb => pb.ShipingAddressId)
+                .OnDelete(DeleteBehavior.Restrict);
+
             builder.ApplyConfiguration(new CategoryConfiguration());
             builder.ApplyConfiguration(new UserConfiguration());
- 
+
             base.OnModelCreating(builder);
         }
         public DbSet<Product> Products { get; set; } = null!;
 
         public DbSet<ShipingAddress> ShipingAddresses { get; set; } = null!;
+
+        public DbSet<Order> Orders { get; set; } = null!;
 
         public DbSet<Category> Categories { get; set; } = null!;
 

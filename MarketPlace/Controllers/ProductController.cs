@@ -84,7 +84,7 @@ namespace MarketPlace.Controllers
                 query.SearchTerm,
                 query.Sorting,
                 query.CurrentPage,
-                AllProductQueryModel.ProductsPerPage);
+                query.ProductsPerPage);
 
             query.TotalProductsCount = model.TotalProductsCount;
             query.Products = model.Products;

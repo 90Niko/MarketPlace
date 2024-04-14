@@ -21,5 +21,14 @@ namespace MarketPlace.Infrastructure.Data.Models
 
         [ForeignKey("ProductId")]
         public Product Product { get; set; } = null!;
+
+        [Key]
+        [Comment("Shiping address identifier")]
+        public int ShipingAddressId { get; set; }
+
+        [ForeignKey("ShipingAddressId")]
+        public ShipingAddress ShipingAddress { get; set; } = null!;
+
+        public DateTime BuyAt { get; set; }
     }
 }

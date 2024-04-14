@@ -62,8 +62,6 @@ namespace MarketPlace.Infrastructure.Data.Models
         public Category Category { get; set; } = null!;
 
         public ICollection<ProductRating> productRatings { get; set; } = new List<ProductRating>();
-
-
-        // public int ShipingAddressId { get; set; }
+  
     }
 }

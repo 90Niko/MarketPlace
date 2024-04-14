@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace MarketPlace.Infrastructure.Migrations
 {
-    public partial class Initial : Migration
+    public partial class ShipingAddress : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -205,8 +205,7 @@ namespace MarketPlace.Infrastructure.Migrations
                     Quantity = table.Column<int>(type: "int", nullable: false, comment: "This is the quantity of the product"),
                     CartQuantity = table.Column<int>(type: "int", nullable: false),
                     SellerId = table.Column<string>(type: "nvarchar(450)", nullable: false, comment: "User identifier"),
-                    CategoryId = table.Column<int>(type: "int", nullable: false, comment: "Product Category identifier"),
-                    ShipingAddressId = table.Column<int>(type: "int", nullable: true)
+                    CategoryId = table.Column<int>(type: "int", nullable: false, comment: "Product Category identifier")
                 },
                 constraints: table =>
                 {
@@ -223,11 +222,6 @@ namespace MarketPlace.Infrastructure.Migrations
                         principalTable: "Categories",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Products_ShipingAddresses_ShipingAddressId",
-                        column: x => x.ShipingAddressId,
-                        principalTable: "ShipingAddresses",
-                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -235,11 +229,12 @@ namespace MarketPlace.Infrastructure.Migrations
                 columns: table => new
                 {
                     BuyerId = table.Column<string>(type: "nvarchar(450)", nullable: false, comment: "Buyer identifier"),
-                    ProductId = table.Column<int>(type: "int", nullable: false, comment: "Product identifier")
+                    ProductId = table.Column<int>(type: "int", nullable: false, comment: "Product identifier"),
+                    ShipingAddressId = table.Column<int>(type: "int", nullable: false, comment: "Shiping address identifier")
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ProductBuyers", x => new { x.BuyerId, x.ProductId });
+                    table.PrimaryKey("PK_ProductBuyers", x => new { x.BuyerId, x.ProductId, x.ShipingAddressId });
                     table.ForeignKey(
                         name: "FK_ProductBuyers_AspNetUsers_BuyerId",
                         column: x => x.BuyerId,
@@ -250,6 +245,12 @@ namespace MarketPlace.Infrastructure.Migrations
                         name: "FK_ProductBuyers_Products_ProductId",
                         column: x => x.ProductId,
                         principalTable: "Products",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_ProductBuyers_ShipingAddresses_ShipingAddressId",
+                        column: x => x.ShipingAddressId,
+                        principalTable: "ShipingAddresses",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 },
@@ -281,7 +282,7 @@ namespace MarketPlace.Infrastructure.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "FirstName", "LastName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
-                values: new object[] { "f5563c5e-d780-4bce-812d-408f2c079ae2", 0, "666a211f-6b9f-47a0-a85b-f99f3e859e6c", "admin@mail.com", false, "Great", "Admin", false, null, "admin@mail.com", "admin@mail.com", "AQAAAAEAACcQAAAAEIanXkgy+TI+aPDN/p+kbVsA23CT8k5jC2ohiqVefwLdHhAHte3c892imTML+/vV/Q==", null, false, "fb1fc9d3-2d24-4481-a5f2-04a615dc02ba", false, "admin@mail.com" });
+                values: new object[] { "f5563c5e-d780-4bce-812d-408f2c079ae2", 0, "e70ea338-0ad2-4307-9ed0-b032bd71a83b", "admin@mail.com", false, "Great", "Admin", false, null, "admin@mail.com", "admin@mail.com", "AQAAAAEAACcQAAAAECjwLHL4i8pZDUHijqMvT9WYuvaTtC3lsPmvCxYV/wNGCvZZoZeJeYMFfGVj2ZP9ng==", null, false, "faa90f1b-1bb9-4d92-b31c-faadc527c200", false, "admin@mail.com" });
 
             migrationBuilder.InsertData(
                 table: "Categories",
@@ -338,6 +339,11 @@ namespace MarketPlace.Infrastructure.Migrations
                 column: "ProductId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_ProductBuyers_ShipingAddressId",
+                table: "ProductBuyers",
+                column: "ShipingAddressId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_ProductRatings_ProductId",
                 table: "ProductRatings",
                 column: "ProductId");
@@ -351,11 +357,6 @@ namespace MarketPlace.Infrastructure.Migrations
                 name: "IX_Products_SellerId",
                 table: "Products",
                 column: "SellerId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Products_ShipingAddressId",
-                table: "Products",
-                column: "ShipingAddressId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -385,6 +386,9 @@ namespace MarketPlace.Infrastructure.Migrations
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
+                name: "ShipingAddresses");
+
+            migrationBuilder.DropTable(
                 name: "Products");
 
             migrationBuilder.DropTable(
@@ -392,9 +396,6 @@ namespace MarketPlace.Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "Categories");
-
-            migrationBuilder.DropTable(
-                name: "ShipingAddresses");
         }
     }
 }

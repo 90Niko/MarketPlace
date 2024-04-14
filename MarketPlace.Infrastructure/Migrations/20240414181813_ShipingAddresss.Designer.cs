@@ -4,6 +4,7 @@ using MarketPlace.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MarketPlace.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240414181813_ShipingAddresss")]
+    partial class ShipingAddresss
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -101,7 +103,7 @@ namespace MarketPlace.Infrastructure.Migrations
                         {
                             Id = "f5563c5e-d780-4bce-812d-408f2c079ae2",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "b32ba0ba-5ade-41bd-8877-8047ebd558d7",
+                            ConcurrencyStamp = "21d61803-da01-42b9-9fe4-0934a9ffd200",
                             Email = "admin@mail.com",
                             EmailConfirmed = false,
                             FirstName = "Great",
@@ -109,9 +111,9 @@ namespace MarketPlace.Infrastructure.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "admin@mail.com",
                             NormalizedUserName = "admin@mail.com",
-                            PasswordHash = "AQAAAAEAACcQAAAAEKO11WBb2qXFB1t1vWmz55aQMVkBHv5QYNhX2onUYXAi1RijvAWuBIiAoDZUb7Drhg==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEL6IgrkqiNFYI/Z4UFEmOL958HQ3ylNb7pTiO+Tl7Ml24gjMsNPwk9Wmg2U5dUDrQQ==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "4ee9223c-6341-4de5-afb1-e65e558c5fd6",
+                            SecurityStamp = "e79c4bd4-13db-4973-b478-a75ebc6b758d",
                             TwoFactorEnabled = false,
                             UserName = "admin@mail.com"
                         });
@@ -154,38 +156,6 @@ namespace MarketPlace.Infrastructure.Migrations
                             Id = 3,
                             Name = "Home and Garten"
                         });
-                });
-
-            modelBuilder.Entity("MarketPlace.Infrastructure.Data.Models.Order", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<string>("BuyerId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("OrderDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("ProductName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("SellerId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ShipingAddress")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Orders");
                 });
 
             modelBuilder.Entity("MarketPlace.Infrastructure.Data.Models.Product", b =>

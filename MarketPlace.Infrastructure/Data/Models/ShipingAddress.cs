@@ -40,6 +40,6 @@ namespace MarketPlace.Infrastructure.Data.Models
         [Comment("User identifier")]
         public string UserId { get; set; } = string.Empty;
 
-        public ICollection<Product> Products { get; set; } = null!;
+       
     }
 }

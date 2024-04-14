@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MarketPlace.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240408101239_Initial")]
-    partial class Initial
+    [Migration("20240414183039_Orders")]
+    partial class Orders
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -103,7 +103,7 @@ namespace MarketPlace.Infrastructure.Migrations
                         {
                             Id = "f5563c5e-d780-4bce-812d-408f2c079ae2",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "666a211f-6b9f-47a0-a85b-f99f3e859e6c",
+                            ConcurrencyStamp = "2a6f2eb5-8bbd-455a-801f-e5f23128e192",
                             Email = "admin@mail.com",
                             EmailConfirmed = false,
                             FirstName = "Great",
@@ -111,9 +111,9 @@ namespace MarketPlace.Infrastructure.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "admin@mail.com",
                             NormalizedUserName = "admin@mail.com",
-                            PasswordHash = "AQAAAAEAACcQAAAAEIanXkgy+TI+aPDN/p+kbVsA23CT8k5jC2ohiqVefwLdHhAHte3c892imTML+/vV/Q==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEKFm4PIaeoKwv+Ja3tn/jnM72jYRfK1ZLaWYegZ/hRmxflXwvN/O8GIDMqQ+fp3mlg==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "fb1fc9d3-2d24-4481-a5f2-04a615dc02ba",
+                            SecurityStamp = "fd04066a-51ed-4596-b7cd-13728e8dd610",
                             TwoFactorEnabled = false,
                             UserName = "admin@mail.com"
                         });
@@ -156,6 +156,30 @@ namespace MarketPlace.Infrastructure.Migrations
                             Id = 3,
                             Name = "Home and Garten"
                         });
+                });
+
+            modelBuilder.Entity("MarketPlace.Infrastructure.Data.Models.Order", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("BuyerId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("OrderDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("SellerId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Orders");
                 });
 
             modelBuilder.Entity("MarketPlace.Infrastructure.Data.Models.Product", b =>
@@ -214,16 +238,11 @@ namespace MarketPlace.Infrastructure.Migrations
                         .HasColumnType("nvarchar(450)")
                         .HasComment("User identifier");
 
-                    b.Property<int?>("ShipingAddressId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.HasIndex("CategoryId");
 
                     b.HasIndex("SellerId");
-
-                    b.HasIndex("ShipingAddressId");
 
                     b.ToTable("Products");
                 });
@@ -238,9 +257,18 @@ namespace MarketPlace.Infrastructure.Migrations
                         .HasColumnType("int")
                         .HasComment("Product identifier");
 
-                    b.HasKey("BuyerId", "ProductId");
+                    b.Property<int>("ShipingAddressId")
+                        .HasColumnType("int")
+                        .HasComment("Shiping address identifier");
+
+                    b.Property<DateTime>("BuyAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("BuyerId", "ProductId", "ShipingAddressId");
 
                     b.HasIndex("ProductId");
+
+                    b.HasIndex("ShipingAddressId");
 
                     b.ToTable("ProductBuyers");
 
@@ -486,10 +514,6 @@ namespace MarketPlace.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("MarketPlace.Infrastructure.Data.Models.ShipingAddress", null)
-                        .WithMany("Products")
-                        .HasForeignKey("ShipingAddressId");
-
                     b.Navigation("Category");
 
                     b.Navigation("Seller");
@@ -509,9 +533,17 @@ namespace MarketPlace.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("MarketPlace.Infrastructure.Data.Models.ShipingAddress", "ShipingAddress")
+                        .WithMany()
+                        .HasForeignKey("ShipingAddressId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.Navigation("Buyer");
 
                     b.Navigation("Product");
+
+                    b.Navigation("ShipingAddress");
                 });
 
             modelBuilder.Entity("MarketPlace.Infrastructure.Data.Models.ProductRating", b =>
@@ -579,11 +611,6 @@ namespace MarketPlace.Infrastructure.Migrations
             modelBuilder.Entity("MarketPlace.Infrastructure.Data.Models.Product", b =>
                 {
                     b.Navigation("productRatings");
-                });
-
-            modelBuilder.Entity("MarketPlace.Infrastructure.Data.Models.ShipingAddress", b =>
-                {
-                    b.Navigation("Products");
                 });
 #pragma warning restore 612, 618
         }

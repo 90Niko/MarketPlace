@@ -2,11 +2,9 @@
 
 @model AllProductsModel
 
-<div class="text-center row">
-
-
-    <div class="card col-4 " style="width: 15rem;">
-        <div class="card-body">
+<div class="col-md-4">
+    <div class="card mb-3" style="width: 15rem;">
+        <div class="card-body text-center">
             <h5 class="card-title mt-1">@Model.Name</h5>
             <img class="card-img-top" src=@Model.Image alt="Product Image" style="width:128px;height:128px;">
             <p class="mb-0"><span class="fw-bold">Added on: </span>@Model.CreatedOn</p>
@@ -20,18 +18,13 @@
 
         @if (User.Identity.Name == Model.Seller)
         {
-            <a asp-controller="Product" asp-action="Edit" asp-route-id="@Model.Id" class="fs-6 btn btn-outline-dark mb-3 w-100 p-3 fw-bold">Edit</a>
-            <a asp-controller="Product" asp-action="Delete" asp-route-id="@Model.Id" class="fs-6 btn btn-outline-danger mb-3 w-100 p-3 fw-bold">Delete</a>
+            <a asp-controller="Product" asp-action="Edit" asp-route-id="@Model.Id" class="fs-6 btn btn-outline-dark mb-3 w-100 p-2 fw-bold">Edit</a>
+            <a asp-controller="Product" asp-action="Delete" asp-route-id="@Model.Id" class="fs-6 btn btn-outline-danger mb-3 w-100 p-2 fw-bold">Delete</a>
         }
         else
         {
-            <form class="input-group-sm" asp-controller="Cart" asp-action="AddToCart" asp-route-id="@Model.Id">
-                <input type="submit" value="Add to Cart" class="fs-6 btn btn-outline-success mb-3 w-100 p-3 fw-bold" />
-            </form>
-            <form class="input-group-sm" asp-controller="Cart" asp-action="AddToCart" asp-route-id="@Model.Id">
-                <input type="submit" value="Details" class="fs-6 btn btn-outline-success mb-3 w-100 p-3 fw-bold" />
-            </form>
+            <a asp-controller="Cart" asp-action="AddToCart" asp-route-id="@Model.Id" class="fs-6 btn btn-outline-success mb-3 w-100 p-2 fw-bold">Add to Cart</a>
+            <a asp-controller="Cart" asp-action="Details" asp-route-id="@Model.Id" class="fs-6 btn btn-outline-success mb-3 w-100 p-2 fw-bold">Details</a>
         }
     </div>
-
 </div>

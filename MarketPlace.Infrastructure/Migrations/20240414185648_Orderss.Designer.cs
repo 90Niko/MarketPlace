@@ -4,6 +4,7 @@ using MarketPlace.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MarketPlace.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240414185648_Orderss")]
+    partial class Orderss
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -101,7 +103,7 @@ namespace MarketPlace.Infrastructure.Migrations
                         {
                             Id = "f5563c5e-d780-4bce-812d-408f2c079ae2",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "b32ba0ba-5ade-41bd-8877-8047ebd558d7",
+                            ConcurrencyStamp = "24576fbd-f338-4c32-a115-d9de919f63df",
                             Email = "admin@mail.com",
                             EmailConfirmed = false,
                             FirstName = "Great",
@@ -109,9 +111,9 @@ namespace MarketPlace.Infrastructure.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "admin@mail.com",
                             NormalizedUserName = "admin@mail.com",
-                            PasswordHash = "AQAAAAEAACcQAAAAEKO11WBb2qXFB1t1vWmz55aQMVkBHv5QYNhX2onUYXAi1RijvAWuBIiAoDZUb7Drhg==",
+                            PasswordHash = "AQAAAAEAACcQAAAAECxPXNUsXTPsXqA3U3n7R2ILK27s4ljUphP3D9OlKsJi/UQy4rM4OxwINlaVQTLCZg==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "4ee9223c-6341-4de5-afb1-e65e558c5fd6",
+                            SecurityStamp = "d7073da8-7cb3-48c6-8061-ddd7981addbf",
                             TwoFactorEnabled = false,
                             UserName = "admin@mail.com"
                         });
@@ -171,15 +173,7 @@ namespace MarketPlace.Infrastructure.Migrations
                     b.Property<DateTime>("OrderDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("ProductName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("SellerId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ShipingAddress")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -231,6 +225,9 @@ namespace MarketPlace.Infrastructure.Migrations
                         .HasColumnType("nvarchar(50)")
                         .HasComment("This is the name of the product");
 
+                    b.Property<int?>("OrderId")
+                        .HasColumnType("int");
+
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)")
                         .HasComment("This is the price of the product");
@@ -247,6 +244,8 @@ namespace MarketPlace.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CategoryId");
+
+                    b.HasIndex("OrderId");
 
                     b.HasIndex("SellerId");
 
@@ -514,6 +513,10 @@ namespace MarketPlace.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("MarketPlace.Infrastructure.Data.Models.Order", null)
+                        .WithMany("Products")
+                        .HasForeignKey("OrderId");
+
                     b.HasOne("MarketPlace.Infrastructure.Data.Models.ApplicationUser", "Seller")
                         .WithMany()
                         .HasForeignKey("SellerId")
@@ -612,6 +615,11 @@ namespace MarketPlace.Infrastructure.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("MarketPlace.Infrastructure.Data.Models.Order", b =>
+                {
+                    b.Navigation("Products");
                 });
 
             modelBuilder.Entity("MarketPlace.Infrastructure.Data.Models.Product", b =>

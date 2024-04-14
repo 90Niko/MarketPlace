@@ -10,6 +10,6 @@ namespace MarketPlace.Core.Models.ProductDto
     {
         public int TotalProductsCount { get; set; }
 
-        public IEnumerable<AllProductsModel> Products { get; set; } = null!;
+        public IEnumerable<AllProductsModel> Products { get; set; }=new List<AllProductsModel>();
     }
 }

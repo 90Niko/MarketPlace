@@ -10,7 +10,7 @@ namespace MarketPlace.Core.Models.ProductDto
 {
     public class AllProductQueryModel
     {
-        public const int ProductsPerPage = 5;
+        public  int ProductsPerPage = 3;
 
         public string Category { get; set; } = null!;
 

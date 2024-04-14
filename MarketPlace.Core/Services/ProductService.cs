@@ -19,9 +19,9 @@ namespace MarketPlace.Core.Services
         public ProductService(ApplicationDbContext data)
             => this.data = data;
 
-        public Task<ProductQueryServiceModel> AllAsync(string? category = null, string? searchTerm = null, ProductSorting sorting = ProductSorting.Newest, int currentPage = 1, int housesPerPage = 1)
+        public async Task<ProductQueryServiceModel> AllAsync(string? category = null, string? searchTerm = null, ProductSorting sorting = ProductSorting.Newest, int currentPage = 1, int housesPerPage = 1)
         {
-           var query = this.data.Products.Where(q=>q.IsApproved==true).AsNoTracking();
+            var query = this.data.Products.Where(q => q.IsApproved == true && q.Quantity > 0).AsNoTracking();
 
             if (!string.IsNullOrWhiteSpace(category))
             {
@@ -54,17 +54,22 @@ namespace MarketPlace.Core.Services
                     Name = p.Name,
                     Price = p.Price,
                     Category = p.Category.Name,
+                    Quantity = p.Quantity,
+                    Seller = p.Seller.UserName,
+                    CreatedOn = p.CreatedOn.ToString("dd/MM/yyyy"),
                     Image = p.Image,
                     Rating = p.productRatings.Count > 0 ? (int)p.productRatings.Average(r => r.Rating) : 0
 
                 })
                 .ToList();
 
-            return Task.FromResult(new ProductQueryServiceModel
+            int totalProduct = await query.CountAsync();
+
+            return new ProductQueryServiceModel
             {
                 TotalProductsCount = totalProducts,
                 Products = products
-            });
+            };
         }
     }
 }
