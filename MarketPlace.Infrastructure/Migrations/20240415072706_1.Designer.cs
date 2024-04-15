@@ -4,6 +4,7 @@ using MarketPlace.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MarketPlace.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240415072706_1")]
+    partial class _1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -101,7 +103,7 @@ namespace MarketPlace.Infrastructure.Migrations
                         {
                             Id = "f5563c5e-d780-4bce-812d-408f2c079ae2",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "b9074a5f-b772-4da5-b48a-a12785ae9e74",
+                            ConcurrencyStamp = "cd23d26f-5abd-4839-839b-74c8527e3b19",
                             Email = "admin@mail.com",
                             EmailConfirmed = false,
                             FirstName = "Great",
@@ -109,9 +111,9 @@ namespace MarketPlace.Infrastructure.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "admin@mail.com",
                             NormalizedUserName = "admin@mail.com",
-                            PasswordHash = "AQAAAAEAACcQAAAAEIJteWnOAoBeqo3KrNBJFzefBdbskvRts1bWsUeaQ4mk7o9JktU0+dam7t7cAnSOnw==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEKMAJdDEqzO/UshxU+0BrUHo2aeUiosQkVMyPyXqRotrbGmeK11oml54rbVKopMzeg==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "03ccc64b-a194-46bd-b601-c64fdab25654",
+                            SecurityStamp = "628465df-c5cc-4158-954d-41b11aff47a2",
                             TwoFactorEnabled = false,
                             UserName = "admin@mail.com"
                         });
@@ -175,9 +177,6 @@ namespace MarketPlace.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("ProductId1")
-                        .HasColumnType("int");
-
                     b.Property<string>("ProductName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -191,8 +190,6 @@ namespace MarketPlace.Infrastructure.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ProductId1");
 
                     b.ToTable("Orders");
                 });
@@ -513,17 +510,6 @@ namespace MarketPlace.Infrastructure.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens", (string)null);
-                });
-
-            modelBuilder.Entity("MarketPlace.Infrastructure.Data.Models.Order", b =>
-                {
-                    b.HasOne("MarketPlace.Infrastructure.Data.Models.Product", "Product")
-                        .WithMany()
-                        .HasForeignKey("ProductId1")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Product");
                 });
 
             modelBuilder.Entity("MarketPlace.Infrastructure.Data.Models.Product", b =>

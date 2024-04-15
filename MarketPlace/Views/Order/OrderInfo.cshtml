@@ -1,0 +1,54 @@
+﻿@using MarketPlace.Core.Models.OrderInfoDto
+@using MarketPlace.Infrastructure.Data.Models
+@using Microsoft.AspNetCore.Identity
+@using static MarketPlace.Extensions.ClaimPrincipalExtensions
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+@model IEnumerable< OrderInfoModel>
+
+@{
+    ViewBag.Title = "Order Info";
+}
+
+<h2 class="text-center">@ViewBag.Title</h2>
+
+
+@if (Model.Any())
+{
+    <div>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Seller Email</th>
+                    <th>Product Name</th>
+                    <th>Date</th>
+                    <th>Shiping Address</th>
+                    <th>Order Details</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    var sellerEmail = UserManager.FindByIdAsync(item.SellerName).Result.UserName;
+
+                    <tr>
+                        <td>@sellerEmail</td>
+                        <td>@item.ProductName</td>
+                        <td>@item.Date</td>
+                        <td>@item.Address</td>
+                        <td>
+                            <form asp-controller="Order" asp-action="Details" asp-route-id="@item.Id">
+                                <input type="submit" value="Details" class="btn btn-danger btn-sm" />
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+
+
+
+

@@ -110,12 +110,12 @@ namespace MarketPlace.Controllers
                 .ToListAsync();
 
             
-            var sellerId = await data.Products.Select(p => p.SellerId).FirstOrDefaultAsync();
+            //var sellerId = await data.Products.Select(p => p.SellerId).FirstOrDefaultAsync();
 
-            if (sellerId == null)
-            {
-                return BadRequest();
-            }
+            //if (sellerId == null)
+            //{
+            //    return BadRequest();
+            //}
 
             var address = await data.ShipingAddresses
                 .Where(p => p.UserId == buyerId)
@@ -135,6 +135,15 @@ namespace MarketPlace.Controllers
                 .Where(p => p.BuyerId == buyerId)
                 .Select(p => p.Product.Name)
                 .ToListAsync();
+            var productIds = await data.ProductBuyers
+                .Where(p => p.BuyerId == buyerId)
+                .Select(p => p.ProductId)
+                .ToListAsync();
+            var sellerId=await data.ProductBuyers
+                .Where(p => p.BuyerId == buyerId)
+                .Select(p=>p.Product.SellerId)
+                .ToListAsync();
+
 
             if (productNames == null)
             {
@@ -144,10 +153,11 @@ namespace MarketPlace.Controllers
             var order = new Order
             {
                 BuyerId = buyerId,
-                SellerId = sellerId,
+                SellerId = sellerId[0],
                 OrderDate = DateTime.Now,
-                ShipingAddress = address.Street + " " + address.City + " " + address.Country + " " + address.ZipCode,
-                ProductName = string.Join(", ", productNames)
+                ShipingAddress = address.Street + ", " + address.City + ", " + address.Country + ", " + address.ZipCode,
+                ProductName = string.Join(", ", productNames),
+                ProductId = string.Join(", ", productIds)
 
             };
 
@@ -248,37 +258,6 @@ namespace MarketPlace.Controllers
             data.SaveChanges();
 
             return RedirectToAction(nameof(Cart));
-        }
-
-        public async Task<IActionResult> OrderInfo()
-        {
-            var userId = GetUserId();
-
-            if (userId == null)
-            {
-                return Unauthorized();
-            }
-
-            var date = await data.Orders
-                .Where(p => p.BuyerId == userId)
-                .Select(p => p.OrderDate)
-                .FirstOrDefaultAsync();
-
-            var orderInfo = await data.ProductBuyers
-             .Include(p => p.ShipingAddress)
-             .Where(p => p.BuyerId == userId)
-             .Select(p => new OrderInfoModel()
-             {
-                 BuyerId = p.BuyerId,
-                 Address = p.ShipingAddress.Street + " " + p.ShipingAddress.City + " " + p.ShipingAddress.Country + " " + p.ShipingAddress.ZipCode,
-                 ProductName = p.Product.Name,
-                 Price = p.Product.Price.ToString(),
-                 Date = date.ToString()
-
-             }).ToListAsync();
-
-
-            return View(orderInfo);
-        }
+        } 
     }
 }

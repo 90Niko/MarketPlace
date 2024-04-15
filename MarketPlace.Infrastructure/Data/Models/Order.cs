@@ -20,9 +20,16 @@ namespace MarketPlace.Infrastructure.Data.Models
 
         [Required]
         public DateTime OrderDate { get; set; }
- 
+
+        [Required]
+        public string ProductId { get; set; } = string.Empty;
+
+        [Required]
         public string ShipingAddress { get; set; } = string.Empty;
 
+        [Required]
         public string ProductName { get; set; } = string.Empty;
+
+
     }
 }
