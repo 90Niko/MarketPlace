@@ -101,7 +101,7 @@ namespace MarketPlace.Infrastructure.Migrations
                         {
                             Id = "f5563c5e-d780-4bce-812d-408f2c079ae2",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "b9074a5f-b772-4da5-b48a-a12785ae9e74",
+                            ConcurrencyStamp = "926ee6ba-4628-4e63-a176-907b9e24b152",
                             Email = "admin@mail.com",
                             EmailConfirmed = false,
                             FirstName = "Great",
@@ -109,9 +109,9 @@ namespace MarketPlace.Infrastructure.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "admin@mail.com",
                             NormalizedUserName = "admin@mail.com",
-                            PasswordHash = "AQAAAAEAACcQAAAAEIJteWnOAoBeqo3KrNBJFzefBdbskvRts1bWsUeaQ4mk7o9JktU0+dam7t7cAnSOnw==",
+                            PasswordHash = "AQAAAAEAACcQAAAAENbSKnnMDB66mNkmonp+GWgl1QnJUEAlLJJvgQnvtLFlr0zEhhEWVs8cNj5h0nxFuA==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "03ccc64b-a194-46bd-b601-c64fdab25654",
+                            SecurityStamp = "2cd7752d-148d-497c-a442-72db458ca6f9",
                             TwoFactorEnabled = false,
                             UserName = "admin@mail.com"
                         });
@@ -175,9 +175,6 @@ namespace MarketPlace.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("ProductId1")
-                        .HasColumnType("int");
-
                     b.Property<string>("ProductName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -191,8 +188,6 @@ namespace MarketPlace.Infrastructure.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ProductId1");
 
                     b.ToTable("Orders");
                 });
@@ -513,17 +508,6 @@ namespace MarketPlace.Infrastructure.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens", (string)null);
-                });
-
-            modelBuilder.Entity("MarketPlace.Infrastructure.Data.Models.Order", b =>
-                {
-                    b.HasOne("MarketPlace.Infrastructure.Data.Models.Product", "Product")
-                        .WithMany()
-                        .HasForeignKey("ProductId1")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Product");
                 });
 
             modelBuilder.Entity("MarketPlace.Infrastructure.Data.Models.Product", b =>

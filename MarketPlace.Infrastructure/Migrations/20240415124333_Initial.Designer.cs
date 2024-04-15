@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MarketPlace.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240414183039_Orders")]
-    partial class Orders
+    [Migration("20240415124333_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -103,7 +103,7 @@ namespace MarketPlace.Infrastructure.Migrations
                         {
                             Id = "f5563c5e-d780-4bce-812d-408f2c079ae2",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "2a6f2eb5-8bbd-455a-801f-e5f23128e192",
+                            ConcurrencyStamp = "926ee6ba-4628-4e63-a176-907b9e24b152",
                             Email = "admin@mail.com",
                             EmailConfirmed = false,
                             FirstName = "Great",
@@ -111,9 +111,9 @@ namespace MarketPlace.Infrastructure.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "admin@mail.com",
                             NormalizedUserName = "admin@mail.com",
-                            PasswordHash = "AQAAAAEAACcQAAAAEKFm4PIaeoKwv+Ja3tn/jnM72jYRfK1ZLaWYegZ/hRmxflXwvN/O8GIDMqQ+fp3mlg==",
+                            PasswordHash = "AQAAAAEAACcQAAAAENbSKnnMDB66mNkmonp+GWgl1QnJUEAlLJJvgQnvtLFlr0zEhhEWVs8cNj5h0nxFuA==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "fd04066a-51ed-4596-b7cd-13728e8dd610",
+                            SecurityStamp = "2cd7752d-148d-497c-a442-72db458ca6f9",
                             TwoFactorEnabled = false,
                             UserName = "admin@mail.com"
                         });
@@ -173,7 +173,19 @@ namespace MarketPlace.Infrastructure.Migrations
                     b.Property<DateTime>("OrderDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("ProductId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ProductName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("SellerId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ShipingAddress")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 

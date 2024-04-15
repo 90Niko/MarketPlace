@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace MarketPlace.Infrastructure.Migrations
 {
-    public partial class ShipingAddress : Migration
+    public partial class Initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -63,6 +63,24 @@ namespace MarketPlace.Infrastructure.Migrations
                     table.PrimaryKey("PK_Categories", x => x.Id);
                 },
                 comment: "This is the category of the product");
+
+            migrationBuilder.CreateTable(
+                name: "Orders",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    BuyerId = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    SellerId = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    OrderDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ProductId = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ShipingAddress = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ProductName = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Orders", x => x.Id);
+                });
 
             migrationBuilder.CreateTable(
                 name: "ShipingAddresses",
@@ -230,7 +248,8 @@ namespace MarketPlace.Infrastructure.Migrations
                 {
                     BuyerId = table.Column<string>(type: "nvarchar(450)", nullable: false, comment: "Buyer identifier"),
                     ProductId = table.Column<int>(type: "int", nullable: false, comment: "Product identifier"),
-                    ShipingAddressId = table.Column<int>(type: "int", nullable: false, comment: "Shiping address identifier")
+                    ShipingAddressId = table.Column<int>(type: "int", nullable: false, comment: "Shiping address identifier"),
+                    BuyAt = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -282,7 +301,7 @@ namespace MarketPlace.Infrastructure.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "FirstName", "LastName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
-                values: new object[] { "f5563c5e-d780-4bce-812d-408f2c079ae2", 0, "e70ea338-0ad2-4307-9ed0-b032bd71a83b", "admin@mail.com", false, "Great", "Admin", false, null, "admin@mail.com", "admin@mail.com", "AQAAAAEAACcQAAAAECjwLHL4i8pZDUHijqMvT9WYuvaTtC3lsPmvCxYV/wNGCvZZoZeJeYMFfGVj2ZP9ng==", null, false, "faa90f1b-1bb9-4d92-b31c-faadc527c200", false, "admin@mail.com" });
+                values: new object[] { "f5563c5e-d780-4bce-812d-408f2c079ae2", 0, "926ee6ba-4628-4e63-a176-907b9e24b152", "admin@mail.com", false, "Great", "Admin", false, null, "admin@mail.com", "admin@mail.com", "AQAAAAEAACcQAAAAENbSKnnMDB66mNkmonp+GWgl1QnJUEAlLJJvgQnvtLFlr0zEhhEWVs8cNj5h0nxFuA==", null, false, "2cd7752d-148d-497c-a442-72db458ca6f9", false, "admin@mail.com" });
 
             migrationBuilder.InsertData(
                 table: "Categories",
@@ -375,6 +394,9 @@ namespace MarketPlace.Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUserTokens");
+
+            migrationBuilder.DropTable(
+                name: "Orders");
 
             migrationBuilder.DropTable(
                 name: "ProductBuyers");

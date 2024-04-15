@@ -1,5 +1,32 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@using MarketPlace.Core.Models.OrderInfoDto
+
+@model List<OrderDetailsModel>
+
 @{
+    ViewBag.Title = "Details";
+}
+
+
+<h2 class="text-center">@ViewBag.Title</h2>
+<hr />
+
+<div class="text-center row">
+
+    @foreach (var a in Model)
+    {
+
+        <div class="card col-4" style="width: 15rem;">
+            <div class="card-body">
+                <h5 class="card-title mt-1">@a.ProdctName</h5>
+                <img class="card-img-top" src=@a.ImageUrl alt="Product Image" style="width:140px;height:140px;">
+                <p class="mb-0"><span class="fw-bold">Order Date: </span>@a.DateOfOrder</p>
+                <p class="mb-0"><span class="fw-bold">Shiping Address: </span>@a.ShipingAddress</p>
+            </div>
+            <a asp-controller="Order" asp-action="Rating" asp-route-id="@a.ProductId" class="fs-6 btn btn-outline-dark mb-3 w-100 p-3 fw-bold">Rating</a>  
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
 }

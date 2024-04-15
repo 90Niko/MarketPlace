@@ -17,6 +17,7 @@ namespace MarketPlace.Infrastructure.Data.Models
         public int Id { get; set; }
 
         [Required]
+        [Range(1, 5)]
         [Comment("This is the rating of the product")]
         public int Rating { get; set; }
 
