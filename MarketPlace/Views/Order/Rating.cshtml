@@ -13,7 +13,7 @@
     <div class="col-sm-12 offset-lg-2 col-lg-8 offset-xl-3 col-xl-6">
         <form asp-action="Rating" method="post">
             <div class="form-group">
-                <label asp-for="Rating"></label> <input asp-for="Rating" class="form-control" placeholder="Raiting...">
+                <label asp-for="Rating"></label> <input asp-for="Rating" min="1" max="5" class="form-control" placeholder="Raiting...">
                 <span asp-validation-for="Rating" class="small text-danger"></span>
             </div>
             <div class="form-group">

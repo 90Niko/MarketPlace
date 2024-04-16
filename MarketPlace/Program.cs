@@ -8,24 +8,10 @@ using MarketPlace.ModelBinders;
 using Microsoft.AspNetCore.Mvc;
 
 var builder = WebApplication.CreateBuilder(args);
-var connectionString = builder.Configuration.GetConnectionString("ApplicationDbContextConnection") ?? throw new InvalidOperationException("Connection string 'ApplicationDbContextConnection' not found.");
-
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(connectionString));
-
-builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
-{
-    options.SignIn.RequireConfirmedAccount = false;
-    options.Password.RequireDigit = false;
-    options.Password.RequireLowercase = false;
-    options.Password.RequireNonAlphanumeric = false;
-    options.Password.RequireUppercase = false;
-})
-              .AddRoles<IdentityRole>()
-              .AddEntityFrameworkStores<ApplicationDbContext>();
 
 builder.Services.AddApplicationDbContext(builder.Configuration);
 builder.Services.AddApplicationIdentity(builder.Configuration);
+
 
 builder.Services.AddControllersWithViews(options =>
 {
@@ -41,12 +27,13 @@ var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
 {
+    app.UseDeveloperExceptionPage();
     app.UseMigrationsEndPoint();
 }
 else
 {
-    app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+    app.UseExceptionHandler("/Home/Error/500");
+    app.UseStatusCodePagesWithReExecute("/Home/Error","?statusCode={0}");
     app.UseHsts();
 }
 
@@ -61,9 +48,9 @@ app.UseAuthorization();
 app.UseEndpoints(endpoints =>
 {
     endpoints.MapControllerRoute(
-           name: "House Details",
-           pattern: "/House/Details/{id}/{information}",
-           defaults: new { Controller = "House", Action = "Details" }
+           name: "Product Details",
+           pattern: "/Product/Details/{id}/{information}",
+           defaults: new { Controller = "Product", Action = "Details" }
     );
 
     endpoints.MapControllerRoute(

@@ -79,27 +79,10 @@ namespace MarketPlace.Areas.Admin.Controllers
                 Name = model.Name
             };
 
-            data.Categories.Add(category);
+            await data.Categories.AddAsync(category);
             await data.SaveChangesAsync();
 
             return RedirectToAction(nameof(Dashboard));
         }
-
-        //[HttpPost]
-        //public async Task<IActionResult> ForReview(int id)
-        //{
-        //    var product = await data.Products.FindAsync(id);
-
-        //    if (product == null)
-        //    {
-        //        return BadRequest();
-        //    }
-
-        //    product.IsApproved = true;
-
-        //    await data.SaveChangesAsync();
-
-        //    return RedirectToAction(nameof(Dashboard));
-        //}
     }
 }
