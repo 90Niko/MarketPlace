@@ -1,0 +1,36 @@
+﻿@model IEnumerable<AllProductsModel>
+
+@{
+    ViewBag.Title = "My Product";
+}
+
+
+<h2 class="text-center">@ViewBag.Title</h2>
+<hr />
+
+<div class="text-center row">
+
+    @foreach (var a in Model)
+    {
+        if (this.User.Identity.Name == a.Seller)
+        {
+            <div class="card col-4" style="width: 15rem;">
+                <div class="card-body">
+                    <h5 class="card-title mt-1">@a.Name</h5>
+                    <img class="card-img-top" src=@a.Image alt="Product Image" style="width:140px;height:140px;">
+                    <p class="mb-0"><span class="fw-bold">Added on: </span>@a.CreatedOn</p>
+                    <p class="mb-0"><span class="fw-bold">Category: </span>@a.Category</p>
+                   @*  <p class="mb-0"><span class="fw-bold">Description: </span>@a.Description</p> *@
+                    <p class="mb-0"><span class="fw-bold">Price: </span>@a.Price Euro</p>
+                    <p class="mb-0"><span class="fw-bold">Seller: </span>@a.Seller</p>
+                </div>
+                <a asp-controller="Product" asp-action="Edit" asp-route-id="@a.Id" class="fs-6 btn btn-outline-dark mb-3 w-100 p-3 fw-bold">Edit</a>
+                <a asp-controller="Product" asp-action="Delete" asp-route-id="@a.Id" class="fs-6 btn btn-outline-danger mb-3 w-100 p-3 fw-bold">Delete</a>
+            </div>
+        }
+    }
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

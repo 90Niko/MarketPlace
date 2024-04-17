@@ -1,0 +1,39 @@
+﻿@using MarketPlace.Infrastructure.Data.Models
+@using Microsoft.AspNetCore.Identity
+@using System.Security.Claims
+@using static MarketPlace.Extensions.ClaimPrincipalExtensions
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+@{
+    string userName = string.Empty;
+
+    if (SignInManager.IsSignedIn(User))
+    {
+        var user = await UserManager.FindByIdAsync(User.Id());
+
+        userName = $"{user.FirstName} {user.LastName}";
+    }
+}
+
+
+<ul class="navbar-nav">
+    @if (SignInManager.IsSignedIn(User))
+    {
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @userName!</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index" title="Back">Public Interface</a>
+        </li>
+    }
+    else
+    {
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Register">Register</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Login">Login</a>
+        </li>
+    }
+</ul>

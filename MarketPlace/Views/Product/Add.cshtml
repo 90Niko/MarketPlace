@@ -1,0 +1,51 @@
+﻿ @model ProductFormModel
+
+@{
+    ViewBag.Title = "Add new Product";
+}
+
+<h2 class="text-center">@ViewBag.Title</h2>
+
+<hr />
+
+<div class="row">
+    <div class="col-sm-12 offset-lg-2 col-lg-8 offset-xl-3 col-xl-6">
+        <form asp-action="Add" method="post">
+            <div class="form-group">
+                <label asp-for="Name"></label> <input asp-for="Name" class="form-control" placeholder="Title...">
+                <span asp-validation-for="Name" class="small text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Description">
+
+                </label> <textarea asp-for="Description" rows="4" class="form-control" placeholder="Your Description...">
+            </textarea> <span asp-validation-for="Description" class="small text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Image"></label> <input asp-for="Image"
+                                                       class="form-control" placeholder="Your fine URL...">
+                <span asp-validation-for="Image" class="small text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Quantity"></label> <input asp-for="Quantity" min="0"
+                                                          class="form-control" placeholder="Qantity of Product">
+                <span asp-validation-for="Quantity" class="small text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Price"></label> <input asp-for="Price"  class="form-control">
+                <span asp-validation-for="Price" class="small text-danger"></span>
+            </div> <div class="form-group">
+                <label asp-for="CategoryId"></label> <select asp-for="CategoryId" class="form-control">
+                    @foreach (var category in Model.Categories)
+                    {
+                        <option value="@category.Id">@category.Name</option>
+                    }
+                </select>
+                <span asp-validation-for="CategoryId" class="small text-danger"></span>
+            </div>
+            <div class="text-center">
+                <input class="btn btn-primary mt-3" type="submit" value="Save" />
+            </div>
+        </form>
+    </div>
+</div>

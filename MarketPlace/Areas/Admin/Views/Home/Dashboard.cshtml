@@ -1,0 +1,27 @@
+﻿@using MarketPlace.Areas.Admin.Models.Product
+@model IEnumerable<ProductListingServiceModel>
+
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<h2 class="text-center">@ViewBag.Title</h2>
+<hr />
+
+<div class="text-center row">
+
+    @foreach (var a in Model)
+    {
+        <div class="card" style="width: 18rem;">
+            <img class="card-img-top" src="@a.ImageUrl" alt="Product Image">
+            <div class="card-body">
+                <p><span class="fw-bold">Name: </span>@a.Name</p>
+                <a asp-controller="Home" asp-action="ForReview" asp-route-id="@a.Id" class="btn btn-primary">For Review</a>
+            </div>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
