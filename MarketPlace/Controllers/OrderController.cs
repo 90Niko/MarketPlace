@@ -129,6 +129,21 @@ namespace MarketPlace.Controllers
             return RedirectToAction(nameof(OrderInfo));
         }
 
+        public async Task<IActionResult> Delete(int id)
+        {
+            var order = await data.Orders.FindAsync(id);
+
+            if (order == null)
+            {
+                return BadRequest();
+            }
+
+            data.Orders.Remove(order);
+            await data.SaveChangesAsync();
+
+            return RedirectToAction(nameof(OrderInfo));
+        }
+
         private string GetUserId()
         {
             return User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? string.Empty;
