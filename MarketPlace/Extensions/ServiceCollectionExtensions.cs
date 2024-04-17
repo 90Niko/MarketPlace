@@ -1,4 +1,6 @@
-﻿using MarketPlace.Core.Contracts.IProductService;
+﻿using MarketPlace.Core.Contracts.ICartService;
+using MarketPlace.Core.Contracts.IProductService;
+using MarketPlace.Core.Contracts.IOrderService;
 using MarketPlace.Core.Services;
 using MarketPlace.Infrastructure.Data;
 using MarketPlace.Infrastructure.Data.Models;
@@ -13,9 +15,10 @@ namespace MarketPlace.Extensions.DependencyInjection
         public static IServiceCollection AddApplicationServices(this IServiceCollection services)
         {
             services.AddScoped<IProductService, ProductService>();
+            services.AddScoped<ICartService, CartService>();
+            services.AddScoped<IOrderService, OrderService>();
 
             return services;
-
         }
 
         public static IServiceCollection AddApplicationDbContext(this IServiceCollection services, IConfiguration config)
@@ -24,13 +27,9 @@ namespace MarketPlace.Extensions.DependencyInjection
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(connectionString));
 
-            
-
             services.AddDatabaseDeveloperPageExceptionFilter();
 
-            return services;
-
-          
+            return services;   
         }
 
         public static IServiceCollection AddApplicationIdentity(this IServiceCollection services, IConfiguration config)

@@ -1,4 +1,5 @@
-﻿using MarketPlace.Core.Models.OrderInfoDto;
+﻿using MarketPlace.Core.Contracts.IOrderService;
+using MarketPlace.Core.Models.OrderInfoDto;
 using MarketPlace.Core.Models.Rating;
 using MarketPlace.Infrastructure.Data;
 using MarketPlace.Infrastructure.Data.Models;
@@ -12,10 +13,12 @@ namespace MarketPlace.Controllers
     public class OrderController : Controller
     {
         private readonly ApplicationDbContext data;
+        private readonly IOrderService orderService;
 
-        public OrderController(ApplicationDbContext data)
+        public OrderController(ApplicationDbContext _data,IOrderService _orderService)
         {
-            this.data = data;
+            data = _data;
+            orderService = _orderService;
         }
 
         [HttpGet]
@@ -28,18 +31,7 @@ namespace MarketPlace.Controllers
                 return Unauthorized();
             }
 
-            var order = await data.Orders
-                 .Where(o => o.BuyerId == userId)
-                 .Select(o => new OrderInfoModel()
-                 {
-                     BuyerId = o.BuyerId,
-                     Date = o.OrderDate.ToString("dd/MM/yyyy/HH:mm"),
-                     ProductName = o.ProductName,
-                     ProductId = o.ProductId,
-                     Address = o.ShipingAddress,
-                     SellerName = o.SellerId,
-                     Id = o.Id
-                 }).ToListAsync();
+           var order= await orderService.AllOrdersAsync(userId);
 
             if (order == null)
             {
@@ -110,17 +102,7 @@ namespace MarketPlace.Controllers
                 return Unauthorized();
             }
 
-            var product = await data.Products.FirstAsync(p => p.Id == id);
-
-            if (product == null)
-            {
-                return BadRequest();
-            }
-
-            var model = new RatingModel
-            {
-                ProductId = id
-            };
+           var model = await orderService.RatingAsync(id);
 
             return View(model);
         }
@@ -142,19 +124,9 @@ namespace MarketPlace.Controllers
                 return BadRequest();
             }
 
-            var newRating = new ProductRating
-            {
-                Rating = model.Rating,
-                Comment = model.Comment,
-                CreatedAt = DateTime.UtcNow,
-                UserId = userId,
-                ProductId = id
-            };
+           var result = await orderService.RatingResultAsync(id, model);
 
-            await data.ProductRatings.AddAsync(newRating);
-            await data.SaveChangesAsync();
-
-            return RedirectToAction(nameof(Details));
+            return RedirectToAction(nameof(OrderInfo));
         }
 
         private string GetUserId()

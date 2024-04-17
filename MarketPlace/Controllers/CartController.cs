@@ -1,4 +1,6 @@
-﻿using MarketPlace.Core.Models.AddressDto;
+﻿using MarketPlace.Core.Contracts.ICartService;
+using MarketPlace.Core.Contracts.IProductService;
+using MarketPlace.Core.Models.AddressDto;
 using MarketPlace.Core.Models.CartDto;
 using MarketPlace.Core.Models.OrderInfoDto;
 using MarketPlace.Infrastructure.Data;
@@ -13,10 +15,12 @@ namespace MarketPlace.Controllers
     public class CartController : BaseController
     {
         private readonly ApplicationDbContext data;
-        public CartController(ApplicationDbContext data)
+        private readonly ICartService serviceCart;
+        public CartController(ApplicationDbContext data, ICartService serviceCart)
               : base(data)
         {
             this.data = data;
+            this.serviceCart = serviceCart;
         }
 
         public async Task<IActionResult> Cart()
@@ -28,19 +32,7 @@ namespace MarketPlace.Controllers
                 return Unauthorized();
             }
 
-            var productBuyer = await data.ProductBuyers
-               .Where(p => p.BuyerId == userId)
-               .Select(p => new CartFormModel()
-               {
-                   Id = p.Product.Id,
-                   ProductDescription = p.Product.Description,
-                   ProductName = p.Product.Name,
-                   ProductPrice = p.Product.Price,
-                   Seller = p.Product.Seller.UserName,
-                   CartQuantity = p.Product.CartQuantity,
-                   Category = p.Product.Category.Name
-               }
-               ).ToListAsync();
+            var productBuyer = await serviceCart.AllCartAsync(userId);
 
             return View(productBuyer);
         }
@@ -109,7 +101,7 @@ namespace MarketPlace.Controllers
                 .Where(p => p.BuyerId == buyerId)
                 .ToListAsync();
 
-            
+
             //var sellerId = await data.Products.Select(p => p.SellerId).FirstOrDefaultAsync();
 
             //if (sellerId == null)
@@ -139,9 +131,9 @@ namespace MarketPlace.Controllers
                 .Where(p => p.BuyerId == buyerId)
                 .Select(p => p.ProductId)
                 .ToListAsync();
-            var sellerId=await data.ProductBuyers
+            var sellerId = await data.ProductBuyers
                 .Where(p => p.BuyerId == buyerId)
-                .Select(p=>p.Product.SellerId)
+                .Select(p => p.Product.SellerId)
                 .ToListAsync();
 
 
@@ -258,6 +250,6 @@ namespace MarketPlace.Controllers
             data.SaveChanges();
 
             return RedirectToAction(nameof(Cart));
-        } 
+        }
     }
 }
