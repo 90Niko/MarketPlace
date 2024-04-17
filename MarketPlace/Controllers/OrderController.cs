@@ -110,7 +110,7 @@ namespace MarketPlace.Controllers
                 return Unauthorized();
             }
 
-           var product=await data.Products.FirstAsync(p => p.Id == id);
+            var product = await data.Products.FirstAsync(p => p.Id == id);
 
             if (product == null)
             {
@@ -135,7 +135,7 @@ namespace MarketPlace.Controllers
                 return Unauthorized();
             }
 
-            var product = await data.Orders.FirstAsync(p => p.Id == id);
+            var product = await data.Products.FindAsync(id);
 
             if (product == null)
             {
@@ -148,13 +148,13 @@ namespace MarketPlace.Controllers
                 Comment = model.Comment,
                 CreatedAt = DateTime.UtcNow,
                 UserId = userId,
-                ProductId =id
+                ProductId = id
             };
 
             await data.ProductRatings.AddAsync(newRating);
             await data.SaveChangesAsync();
 
-            return RedirectToAction(nameof(OrderInfo));
+            return RedirectToAction(nameof(Details));
         }
 
         private string GetUserId()

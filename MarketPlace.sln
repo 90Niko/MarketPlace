@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MarketPlace.Core", "MarketP
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MarketPlace.Infrastructure", "MarketPlace.Infrastructure\MarketPlace.Infrastructure.csproj", "{882D5002-5556-4143-A60D-E24FA6D57A01}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MarketPlace.Tests", "MarketPlace.Tests\MarketPlace.Tests.csproj", "{08B1CDC1-A18D-4A6F-83E2-5346A6DD320E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MarketPlace.TestProject", "MarketPlace.TestProject\MarketPlace.TestProject.csproj", "{C84E1B92-E2B1-4090-AA42-1F5A89735F93}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,10 +29,10 @@ Global
 		{882D5002-5556-4143-A60D-E24FA6D57A01}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{882D5002-5556-4143-A60D-E24FA6D57A01}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{882D5002-5556-4143-A60D-E24FA6D57A01}.Release|Any CPU.Build.0 = Release|Any CPU
-		{08B1CDC1-A18D-4A6F-83E2-5346A6DD320E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{08B1CDC1-A18D-4A6F-83E2-5346A6DD320E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{08B1CDC1-A18D-4A6F-83E2-5346A6DD320E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{08B1CDC1-A18D-4A6F-83E2-5346A6DD320E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C84E1B92-E2B1-4090-AA42-1F5A89735F93}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C84E1B92-E2B1-4090-AA42-1F5A89735F93}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C84E1B92-E2B1-4090-AA42-1F5A89735F93}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C84E1B92-E2B1-4090-AA42-1F5A89735F93}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

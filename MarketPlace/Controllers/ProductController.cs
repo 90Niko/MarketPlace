@@ -1,4 +1,5 @@
 ﻿using MarketPlace.Core.Contracts;
+using MarketPlace.Core.Contracts.IProductService;
 using MarketPlace.Core.Models;
 using MarketPlace.Core.Models.ProductDto;
 using MarketPlace.Infrastructure.Data;
@@ -6,6 +7,7 @@ using MarketPlace.Infrastructure.Data.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.VisualBasic;
 
 namespace MarketPlace.Controllers
 {
@@ -27,12 +29,7 @@ namespace MarketPlace.Controllers
 
             ProductFormModel model = new ProductFormModel()
             {
-                Categories = await data.Categories.Select(c => new ProductCategoryServiceModel()
-                {
-                    Id = c.Id,
-                    Name = c.Name
-
-                }).ToListAsync()
+                Categories = await productService.AllCategoryAsync()
             };
 
             return View(model);
@@ -50,30 +47,12 @@ namespace MarketPlace.Controllers
 
             if (!ModelState.IsValid)
             {
-                model.Categories = await data.Categories.Select(c => new ProductCategoryServiceModel()
-                {
-                    Id = c.Id,
-                    Name = c.Name
-
-                }).ToListAsync();
+                model.Categories = await productService.AllCategoryAsync();
 
                 return View(model);
             }
 
-            var newProduct = new Product
-            {
-                Name = model.Name,
-                Description = model.Description,
-                Price = model.Price,
-                Image = model.Image,
-                CreatedOn = DateTime.Now,
-                SellerId = userId,
-                CategoryId = model.CategoryId,
-                Quantity = model.Quantity
-            };
-
-            await data.Products.AddAsync(newProduct);
-            await data.SaveChangesAsync();
+            await productService.CreateAsync(model, userId);
 
             return RedirectToAction(nameof(All));
         }
@@ -97,25 +76,14 @@ namespace MarketPlace.Controllers
         {
             string userId = GetUserId();
 
+            IEnumerable<AllProductsModel> products = await productService.AllProductsUserIdAsync(userId);
+
             if (userId == null)
             {
                 return Unauthorized();
             }
 
-            var products = await data
-                .Products
-                .Select(p => new AllProductsModel()
-                {
-                    Id = p.Id,
-                    Description = p.Description,
-                    Name = p.Name,
-                    Price = (decimal)p.Price,
-                    Image = p.Image,
-                    CreatedOn = p.CreatedOn.ToString("dd/MM/yyyy"),
-                    Seller = p.Seller.UserName,
-                    Category = p.Category.Name
-                })
-               .ToListAsync();
+            // await productService.AllProductsUserIdAsync(userId);
 
             return View(products);
         }
@@ -130,15 +98,7 @@ namespace MarketPlace.Controllers
                 return Unauthorized();
             }
 
-            var product = await data.Products.FirstOrDefaultAsync(p => p.Id == id && p.SellerId == userId);
-
-            if (product == null)
-            {
-                return NotFound();
-            }
-
-            data.Products.Remove(product);
-            await data.SaveChangesAsync();
+            await productService.DeleteAsync(id);
 
             return RedirectToAction(nameof(All));
         }
@@ -153,25 +113,19 @@ namespace MarketPlace.Controllers
                 return Unauthorized();
             }
 
-            var product = await data.Products.FirstOrDefaultAsync(p => p.Id == id && p.SellerId == userId);
+            if (!await productService.ExistAsync(id))
+            {
+                return BadRequest();
+            }
+
+            var product = await productService.GetProductByIdAsync(id);
 
             if (product == null)
             {
                 return NotFound();
             }
 
-            var model = new ProductFormModel
-            {
-                Name = product.Name,
-                Description = product.Description,
-                Price = product.Price,
-                Image = product.Image,
-                CategoryId = product.CategoryId,
-                Quantity = product.Quantity,
-                Categories = GetCategories()
-            };
-
-            return View(model);
+            return View(product);
         }
 
         [HttpPost]
@@ -184,23 +138,23 @@ namespace MarketPlace.Controllers
                 return Unauthorized();
             }
 
-            var product = await data.Products.FirstOrDefaultAsync(p => p.Id == id && p.SellerId == userId);
+            if (!ModelState.IsValid)
+            {
+                model.Categories = await productService.AllCategoryAsync();
+
+                return View(model);
+            }
+
+            var product = await productService.GetProductByIdAsync(id);
 
             if (product == null)
             {
                 return NotFound();
             }
 
-            product.Name = model.Name;
-            product.Description = model.Description;
-            product.Price = model.Price;
-            product.Image = model.Image;
-            product.Quantity = model.Quantity;
-            product.CategoryId = model.CategoryId;
+            await productService.EditAsync(id, model);
 
-            await data.SaveChangesAsync();
-
-            return RedirectToAction(nameof(All));
+            return RedirectToAction(nameof(Mine));
         }
     }
 }

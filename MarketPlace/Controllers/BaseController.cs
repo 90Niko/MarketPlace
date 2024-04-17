@@ -7,11 +7,13 @@ namespace MarketPlace.Controllers
 {
     public class BaseController : Controller
     {
-        private readonly ApplicationDbContext data;
+
+        ApplicationDbContext data;
 
         public BaseController(ApplicationDbContext data)
-            => this.data = data;
-
+        {
+            this.data = data;
+        }
 
         public IActionResult Index()
         {

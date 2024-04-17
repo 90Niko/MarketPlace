@@ -1,4 +1,4 @@
-﻿using MarketPlace.Core.Contracts;
+﻿using MarketPlace.Core.Contracts.IProductService;
 using MarketPlace.Core.Services;
 using MarketPlace.Infrastructure.Data;
 using MarketPlace.Infrastructure.Data.Models;
@@ -30,7 +30,7 @@ namespace MarketPlace.Extensions.DependencyInjection
 
             return services;
 
-            return services;
+          
         }
 
         public static IServiceCollection AddApplicationIdentity(this IServiceCollection services, IConfiguration config)

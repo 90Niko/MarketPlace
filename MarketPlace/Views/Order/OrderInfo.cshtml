@@ -39,12 +39,12 @@
                         <td>@item.Date</td>
                         <td>@item.Address</td>
                         <td>
-                            @* <form asp-controller="Order" asp-action="Details" asp-route-id="@item.Id">
+                            <form asp-controller="Order" asp-action="Details" asp-route-id="@item.Id">
                                 <input type="submit" value="Details" class="btn btn-danger btn-sm" />
                             </form>
                             <form asp-controller="Order" asp-action="Delete" asp-route-id="@item.Id">
                                 <input type="submit" value="Delete" class="btn btn-danger btn-sm" />
-                            </form> *@
+                            </form> 
                         </td>
                     </tr>
                 }
