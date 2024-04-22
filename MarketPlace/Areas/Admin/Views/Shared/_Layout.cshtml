@@ -35,11 +35,11 @@
             @RenderBody()
         </main>
     </div>
-       <footer class="border-top footer text-muted">
-    <div class="container">
-    &copy; @DateTime.Now.Year - MarketPlace <span class="text-danger">This area is only for Administrators!</span>
-    </div>
-    </footer> 
+    <footer class="border-top footer text-muted">
+        <div class="container text-center">
+            &copy; @DateTime.Now.Year - Marketplace - <span class="text-danger">This area is only for Administrators!</span>
+        </div>
+    </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
@@ -48,7 +48,19 @@
     <script src="js/scripts.js"></script>
     @await RenderSectionAsync("Scripts", required: false)
 
-    
+
 </body>
 </html>
+<style>
+
+    .footer {
+        position: fixed;
+        bottom: 50px;
+        overflow: hidden;
+        width: 100%;
+        margin: 0px auto;
+    }
+
+</style>
+
 

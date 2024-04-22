@@ -9,7 +9,10 @@
 <hr />
 
 <div class="text-center row">
-
+    @if(!Model.Any())
+    {
+        <h2>No Products for Review</h2>
+    }
     @foreach (var a in Model)
     {
         <div class="card" style="width: 18rem;">
