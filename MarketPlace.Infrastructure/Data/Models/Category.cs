@@ -16,5 +16,8 @@ namespace MarketPlace.Infrastructure.Data.Models
         [Comment("This is the name of the category")]
         public string Name { get; set; }=string.Empty;
 
+        [Required]
+        [Comment("Check deleted")]
+        public bool IsDeleted { get; set; }=false;
     }
 }
