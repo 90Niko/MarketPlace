@@ -1,0 +1,22 @@
+﻿@using MarketPlace.Areas.Admin.Models.Product
+
+
+@model IEnumerable<CategoryServiceModel>
+
+@{
+    ViewBag.Title = "All Category";
+}
+
+<h2 class="text-center">@ViewBag.Title</h2>
+<hr />
+
+@foreach (var category in Model)
+{
+    if (category.IsDeleted == false)
+    {
+        <p class="fw-bold fs-4">@category.Name</p>
+        <p class="fs-6">@category.IsDeleted</p>
+        <p class="fs-6">@category.Id</p>
+        <a asp-controller="User" asp-action="DeleteCategory" asp-route-id="@category.Id"class=" fs-6 btn btn-outline-danger mb-3 w-100 p-2 fw-bold">Delete</a>
+    }
+}

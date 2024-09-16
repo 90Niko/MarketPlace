@@ -78,6 +78,7 @@ namespace MarketPlace.Core.Services
         {
             return await data
                 .Categories
+                .Where(c => c.IsDeleted==false)
                 .Select(c => new ProductCategoryServiceModel
                 {
                     Id = c.Id,

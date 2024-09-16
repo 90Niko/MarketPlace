@@ -22,7 +22,8 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <a class="nav-link text-dark" asp-area="Admin" asp-controller="User" asp-action="All">All Users</a>
-                        <a class="nav-link text-dark" asp-area="Admin" asp-controller="Home" asp-action="AddCategory">Add new Category</a>
+                        <a class="nav-link text-dark" asp-area="Admin" asp-controller="User" asp-action="AddCategory">Add new Category</a>
+                        <a class="nav-link text-dark" asp-area="Admin" asp-controller="User" asp-action="AllCategory">All Category</a>
                     </ul>
                     @* @await Component.InvokeAsync(nameof(AdminMenuCompnent)) *@
                     <partial name="_AdminPartial" />
