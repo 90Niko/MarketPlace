@@ -19,8 +19,6 @@ namespace MarketPlace.Core.Contracts.IProductService
 
         Task<IEnumerable<ProductCategoryServiceModel>> AllCategoryAsync();
 
-        //Task<ProductDetailsServiceModel> DetailsAsync(int id);
-
         Task DeleteAsync(int productId);
 
         Task<int> CreateAsync(ProductFormModel model, string sellerId);

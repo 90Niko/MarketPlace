@@ -36,7 +36,8 @@
                 <span asp-validation-for="Price" class="small text-danger"></span>
             </div> <div class="form-group">
                 <label asp-for="CategoryId"></label> <select asp-for="CategoryId" class="form-control">
-                    @foreach (var category in Model.Categories)
+                    
+                    @foreach (var category in Model.Categories.Where(c => c.IsDeleted == false))
                     {
                         <option value="@category.Id">@category.Name</option>
                     }
