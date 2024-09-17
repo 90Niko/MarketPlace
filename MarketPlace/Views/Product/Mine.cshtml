@@ -3,12 +3,12 @@
 @{
     ViewBag.Title = "My Product";
 }
-
+<link rel="stylesheet" href="~/MarketPlace/Mine.css" asp-append-version="true" />
 
 <h2 class="text-center">@ViewBag.Title</h2>
 <hr />
 
-<div class="text-center row">
+@* <div class="text-center row">
 
     @foreach (var a in Model)
     {
@@ -20,7 +20,7 @@
                     <img class="card-img-top" src=@a.Image alt="Product Image" style="width:140px;height:140px;">
                     <p class="mb-0"><span class="fw-bold">Added on: </span>@a.CreatedOn</p>
                     <p class="mb-0"><span class="fw-bold">Category: </span>@a.Category</p>
-                   @*  <p class="mb-0"><span class="fw-bold">Description: </span>@a.Description</p> *@
+                    @*  <p class="mb-0"><span class="fw-bold">Description: </span>@a.Description</p> 
                     <p class="mb-0"><span class="fw-bold">Price: </span>@a.Price Euro</p>
                     <p class="mb-0"><span class="fw-bold">Seller: </span>@a.Seller</p>
                 </div>
@@ -30,7 +30,32 @@
         }
     }
 </div>
+ *@
+ <div class="text-center row">
 
+    @foreach (var a in Model)
+    {
+        if (this.User.Identity.Name == a.Seller)
+        {
+            <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
+                <div class="card h-100 shadow-sm border-0" style="border-radius: 10px;">
+                    <img class="card-img-top mx-auto mt-3" src="@a.Image" alt="Product Image" style="width: auto; height: 140px; object-fit: cover;">
+                    <div class="card-body text-center">
+                        <h5 class="card-title mt-3">@a.Name</h5>
+                        <p class="mb-2"><span class="fw-bold">Added on: </span>@a.CreatedOn</p>
+                        <p class="mb-2"><span class="fw-bold">Category: </span>@a.Category</p>
+                        <p class="mb-2"><span class="fw-bold">Price: </span>@a.Price Euro</p>
+                        <p class="mb-2"><span class="fw-bold">Seller: </span>@a.Seller</p>
+                    </div>
+                    <div class="card-footer bg-transparent border-0">
+                                <a asp-controller="Product" asp-action="Edit" asp-route-id="@a.Id" class="btn btn-outline-dark w-100 mb-2 fw-bold">Edit</a>
+                        <a asp-controller="Product" asp-action="Delete" asp-route-id="@a.Id" class="btn btn-outline-danger w-100 mb-2 fw-bold">Delete</a>
+                    </div>
+                </div>
+            </div>
+        }
+    }
+</div>
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
 }
