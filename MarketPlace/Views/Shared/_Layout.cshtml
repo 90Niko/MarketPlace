@@ -17,8 +17,8 @@
     <!-- Core theme CSS (includes Bootstrap)-->
     <link href="css/styles.css" rel="stylesheet" />
 </head>
-<body style="background-color:powderblue;">
-    <header style="background-color:powderblue;">
+<body style="background-color:powderblue; margin:0 auto;">
+    <header style="background-color:#f8f9fa;">
         <nav class="navbar navbar-expand-sm bg-info navbar-dark">
             <div class="container-fluid">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Marketplace</a>
@@ -67,7 +67,7 @@
 
     <footer class="border-top footer text-muted">
         <div class="container text-center">
-            &copy; @DateTime.Now.Year - Marketplace -
+            <a>&copy; @DateTime.Now.Year - Marketplace -</a>
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
@@ -82,80 +82,103 @@
 </html>
 <style>
     /* Navbar styles */
-.navbar {
-    background-color: #f8f9fa; /* Light background */
-    padding: 1rem; /* Padding around the navbar */
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Slight shadow for depth */
-}
-
-.navbar-nav .nav-link {
-    color: #343a40; /* Dark text for the links */
-    padding: 0.5rem 1rem; /* Spacing inside the links */
-    font-weight: 500; /* Slightly bolder text */
-    transition: color 0.3s ease, background-color 0.3s ease; /* Smooth transitions */
-    
-}
-
-.navbar-nav .nav-link:hover {
-    color: #007bff; /* Blue color on hover */
-    background-color: #e9ecef; /* Light background color on hover */
-    border-radius: 5px; /* Rounded corners on hover */
-    transform: scale(1.2);
-}
-
-.navbar-nav .active {
-    color: #007bff; /* Highlight active link */
-    border-bottom: 2px solid #007bff; /* Active state underline */
-}
-
-.navbar-nav li {
-    margin-right: 1.2rem; /* Space between list items */
-}
-
-.navbar .navbar-collapse {
-    justify-content: space-between; /* Evenly space out the navbar contents */
-}
-
-/* Styles for when the user is authenticated */
-.navbar .authenticated .nav-link {
-    font-style: italic; /* Italicize links for authenticated users */
-}
-
-/* Admin-specific styles */
-.navbar .admin-link {
-    color: #dc3545; /* Red color for admin link */
-    font-weight: bold; /* Bold admin link */
-}
-
-.navbar .admin-link:hover {
-    color: #ff6b6b; /* Lighter red on hover */
-}
-
-/* Styling the login partial */
-.partial-login {
-    display: flex;
-    align-items: center;
-}
-
-.partial-login a {
-    color: #28a745; /* Green color for login/logout link */
-    font-weight: 600; /* Bolder font */
-}
-
-.partial-login a:hover {
-    color: #218838; /* Darker green on hover */
-}
-
-/* Mobile adjustments */
-
-
-    .footer {
-            
-        position: fixed;
-        bottom: 50px;
-        overflow: hidden;
-        width: 100%;
-        margin: 0px auto;
+    .navbar {
+        background-color: #f8f9fa; /* Light background */
+        padding: 1rem; /* Padding around the navbar */
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Slight shadow for depth */
     }
+
+    .navbar-nav .nav-link {
+        color: #343a40; /* Dark text for the links */
+        padding: 0.5rem 1rem; /* Spacing inside the links */
+        font-weight: 500; /* Slightly bolder text */
+        transition: color 0.3s ease, background-color 0.3s ease; /* Smooth transitions */
+    }
+
+        .navbar-nav .nav-link:hover {
+            color: #007bff; /* Blue color on hover */
+            background-color: #e9ecef; /* Light background color on hover */
+            border-radius: 5px; /* Rounded corners on hover */
+            transform: scale(1.2);
+        }
+
+    .navbar-nav .active {
+        color: #007bff; /* Highlight active link */
+        border-bottom: 2px solid #007bff; /* Active state underline */
+    }
+
+    .navbar-nav li {
+        margin-right: 1.2rem; /* Space between list items */
+    }
+
+    .navbar .navbar-collapse {
+        justify-content: space-between; /* Evenly space out the navbar contents */
+    }
+
+    /* Styles for when the user is authenticated */
+    .navbar .authenticated .nav-link {
+        font-style: italic; /* Italicize links for authenticated users */
+    }
+
+    /* Admin-specific styles */
+    .navbar .admin-link {
+        color: #dc3545; /* Red color for admin link */
+        font-weight: bold; /* Bold admin link */
+    }
+
+        .navbar .admin-link:hover {
+            color: #ff6b6b; /* Lighter red on hover */
+        }
+
+    /* Styling the login partial */
+    .partial-login {
+        display: flex;
+        align-items: center;
+    }
+
+        .partial-login a {
+            color: #28a745; /* Green color for login/logout link */
+            font-weight: 600; /* Bolder font */
+        }
+
+            .partial-login a:hover {
+                color: #218838; /* Darker green on hover */
+            }
+
+    /* Mobile adjustments */
+
+    .navbar-nav .nav-link {
+        transform-origin: center; /* Ensure the element grows from the center */
+    }
+
+    /* Footer container styling */
+footer {
+        background-color: #powderblue; /* Light gray background */
+    padding: 1.3rem 0; /* Padding for top and bottom spacing */
+    border-top: 1px solid #dee2e6; /* Light border on top */
+    font-size: 1rem; /* Slightly smaller font size */
+    color: #6c757d; /* Muted text color */
+}
+
+/* Centering the content inside the footer */
+.footer .container {
+    display: flex; /* Use flexbox to center the content */
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+    flex-direction: column; /* Stack items vertically */
+}
+
+/* Optional link styling (if there are links in the footer) */
+.footer a {
+    color: #007bff; /* Default blue for links */
+    text-decoration: none; /* Remove underline */
+    transition: color 0.3s ease; /* Smooth color transition */
+}
+
+.footer a:hover {
+    color: #0056b3; /* Darker blue on hover */
+}
+
+
 
 </style>
