@@ -45,3 +45,70 @@
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
 }
+<style>
+    /* General Styles for the Form */
+#registerForm {
+    background-color: #f8f9fa; /* Light background for contrast */
+    border-radius: 8px; /* Rounded corners */
+    padding: 20px; /* Padding inside the form */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Soft shadow for depth */
+    align-items:center;
+    margin:0 auto;
+    justify-content:center;
+   
+}
+
+/* Styling the form heading */
+#registerForm h2 {
+    font-family: 'Roboto', sans-serif;
+    font-size: 1.5rem; /* Slightly larger than normal */
+    font-weight: 500; /* Semi-bold */
+    color: #333; /* Darker text color for contrast */
+    margin-bottom: 20px; /* Add space below the heading */
+}
+
+/* Style for input fields */
+#registerForm .form-floating {
+    position: relative;
+}
+
+#registerForm .form-control {
+    border-radius: 8px; /* Smooth rounded edges */
+    padding: 12px 15px; /* Slightly larger padding */
+    border: 1px solid #ced4da; /* Border for inputs */
+    transition: border-color 0.3s, box-shadow 0.3s; /* Smooth transitions */
+}
+
+/* Focus state for form inputs */
+#registerForm .form-control:focus {
+    border-color: #007bff; /* Blue border on focus */
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.25); /* Glow effect on focus */
+}
+
+/* Style for form labels */
+#registerForm label {
+    color: #6c757d; /* Soft gray for floating label */
+    font-size: 0.875rem; /* Smaller font size for labels */
+    transition: color 0.3s;
+}
+
+/* Style for validation messages */
+#registerForm .text-danger {
+    font-size: 0.875rem; /* Smaller font size */
+    margin-top: 5px; /* Add space above validation message */
+}
+
+/* Style for the submit button */
+#registerSubmit {
+    background-color: #007bff; /* Bootstrap primary color */
+    border: none; /* Remove default border */
+    border-radius: 8px; /* Rounded corners */
+    padding: 12px; /* Add padding */
+    transition: background-color 0.3s ease; /* Smooth color transition */
+}
+
+#registerSubmit:hover {
+    background-color: #0056b3; /* Darken on hover */
+}
+
+</style>
