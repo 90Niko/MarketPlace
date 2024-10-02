@@ -9,6 +9,8 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/MarketPlace.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/UserArea/Mine/Mine.css" asp-append-version="true" />
+
     <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
     <link rel="stylesheet" href="~/css/mine.css" asp-append-version="true" />
     <!-- Bootstrap icons-->
@@ -16,8 +18,8 @@
     <!-- Core theme CSS (includes Bootstrap)-->
     <link href="css/styles.css" rel="stylesheet" />
 </head>
-<body style="background-color:powderblue;">
-    <header style="background-color:powderblue;">
+<body style="background-color:powderblue; margin:0 auto;">
+    <header style="background-color:#f8f9fa;">
         <nav class="navbar navbar-expand-sm bg-info navbar-dark">
             <div class="container-fluid">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Marketplace</a>
@@ -66,7 +68,7 @@
 
     <footer class="border-top footer text-muted">
         <div class="container text-center">
-            &copy; @DateTime.Now.Year - Marketplace -
+            <a>&copy; @DateTime.Now.Year - Marketplace -</a>
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
@@ -80,15 +82,5 @@
 </body>
 </html>
 <style>
-    a .nav-link text-dark>* {
-        color: red;
-    }
-    .footer {
-            
-        position: fixed;
-        bottom: 50px;
-        overflow: hidden;
-        width: 100%;
-        margin: 0px auto;
-    }
+
 </style>

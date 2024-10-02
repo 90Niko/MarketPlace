@@ -2,14 +2,11 @@
 
 @model AllProductsModel
 
-<div class="text-center col-4">
-    <div class="card" style="width:16rem; border:1px solid black;padding:7px">
-        <div class="card-body" style="width:15rem;text-align:center; ">
+
             <h5 class="card-title mt-1">@Model.Name</h5>
             <img class="card-img-top" src=@Model.Image alt="Product Image" style="width:155px;height:155px;">
             <p class="mb-0"><span class="fw-bold">Added on: </span>@Model.CreatedOn</p>
             <p class="mb-0"><span class="fw-bold">Category: </span>@Model.Category</p>
-            @*  <p class="mb-0"><span class="fw-bold">Description: </span>@a.Description</p> *@
             <p class="mb-0"><span class="fw-bold">Price: </span>@Model.Price Euro</p>
             <p class="mb-0"><span class="fw-bold">Seller: </span>@Model.Seller</p>
             <p class="mb-0"><span class="fw-bold">Quantity: </span>@Model.Quantity</p>
@@ -28,9 +25,3 @@
         }
     </div>
 </div>
-<style>
-   div a{
-        font-size: 1rem;
-        border-block-color: black;
-    }
-</style>

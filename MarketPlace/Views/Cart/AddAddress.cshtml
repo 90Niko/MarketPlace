@@ -11,25 +11,25 @@
 
 <div class="wrapper">
     <form asp-action="AddAddress" method="post">
-        <div>
-            <label asp-for="Recipient"></label>
-            <input required type="text" id="Recipient" name="Recipient" autocomplete="Recipient" enterkeyhint="next">
+        <div class="form-group">
+            <label asp-for="Recipient" class="form-label">Recipient</label>
+            <input class="form-input" required type="text" id="Recipient" name="Recipient" autocomplete="Recipient" enterkeyhint="next">
         </div>
-        <div>
-            <label asp-for="@Model.Street"></label>
-            <input type="text" id="Street" name="Street" autocomplete="Street" required enterkeyhint="next">
+        <div class="form-group">
+            <label asp-for="@Model.Street" class="form-label">Street</label>
+            <input class="form-input" type="text" id="Street" name="Street" autocomplete="Street" required enterkeyhint="next">
         </div>
-        <div>
-            <label asp-for="@Model.ZipCode"></label>
-            <input class="text" id="ZipCode" name="ZipCode" autocomplete="ZipCode" enterkeyhint="next">
+        <div class="form-group">
+            <label asp-for="@Model.ZipCode" class="form-label">Zip Code</label>
+            <input class="form-input" type="text" id="ZipCode" name="ZipCode" autocomplete="ZipCode" enterkeyhint="next">
         </div>
-        <div>
-            <label asp-for="@Model.City"></label>
-            <input required type="text" id="city" name="city" autocomplete="address-level2" enterkeyhint="next">
+        <div class="form-group">
+            <label asp-for="@Model.City" class="form-label">City</label>
+            <input class="form-input" required type="text" id="city" name="city" autocomplete="address-level2" enterkeyhint="next">
         </div>
-        <div>
-            <label asp-for="@Model.Country">Country or region</label>
-            <select id="country" name="country" autocomplete="country" enterkeyhint="done" required>
+        <div class="form-group">
+            <label asp-for="@Model.Country" class="form-label">Country or region</label>
+            <select class="form-select" id="country" name="country" autocomplete="country" enterkeyhint="done" required>
                 <option></option>
                 <option value="AF">Afghanistan</option>
                 <option value="AX">Åland Islands</option>
@@ -285,38 +285,63 @@
         <button class="btn btn-outline-success">Save address</button>
     </form>
 </div>
+
 <style>
-    form {
-        width: 90vw;
-        max-width: 20em;
-    }
+    /* General form wrapper styling */
+.wrapper {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    font-family: Arial, sans-serif;
+}
 
-    button {
-        margin-top: 2rem;
-    }
+/* Form group and label styling */
+.form-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 15px;
+}
 
-    input {
-        border: 1px solid;
-        padding: 0.3em;
-        width: 100%;
-    }
+.form-label {
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #333;
+}
 
-    textarea {
-        width: 100%;
-        min-height: 6em;
-    }
+/* Input and select styling */
+.form-input, .form-select {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+    transition: border-color 0.3s;
+}
 
-    label {
-        display: block;
-        font-size: 1.2rem;
-        margin-top: 1rem;
-    }
+.form-input:focus, .form-select:focus {
+    border-color: #4CAF50;
+    outline: none;
+}
 
-    select {
-        font-size: 16px;
-    }
+/* Button styling */
+.btn {
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
 
-    .postal-code {
-        width: 50%;
-    }
+.btn-outline-success {
+    background-color: white;
+    color: #28a745;
+    border: 2px solid #28a745;
+}
+
+.btn-outline-success:hover {
+    background-color: #28a745;
+    color: white;
+}
 </style>
