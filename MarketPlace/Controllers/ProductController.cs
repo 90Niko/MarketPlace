@@ -56,6 +56,7 @@ namespace MarketPlace.Controllers
 
             return RedirectToAction(nameof(All));
         }
+        [AllowAnonymous] 
         public async Task<IActionResult> All([FromQuery] AllProductQueryModel query)
         {
             var model = await productService.AllAsync(
