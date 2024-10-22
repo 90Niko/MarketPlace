@@ -3,6 +3,7 @@
 @model AllProductsModel
 
 
+<<<<<<< HEAD
             <h5 class="card-title mt-1">@Model.Name</h5>
             <img class="card-img-top" src=@Model.Image alt="Product Image" style="width:155px;height:155px;">
             <p class="mb-0"><span class="fw-bold">Added on: </span>@Model.CreatedOn</p>
@@ -25,3 +26,159 @@
         }
     </div>
 </div>
+=======
+@* <div class="col-md-4">
+    <div class="card mb-3" style="width: 15rem; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);">
+       
+        <article class="card-body text-center">
+            <h5 class="card-title mt-3">@Model.Name</h5>
+
+            <img class="card-img-top mx-auto d-block" src="@Model.Image" alt="Image of @Model.Name" style="width:128px; height:128px;">
+
+            <ul class="list-unstyled mt-3">
+                <li class="mb-1">
+                    <span class="fw-bold">Added on: </span>@Model.CreatedOn
+                </li>
+                <li class="mb-1">
+                    <span class="fw-bold">Category: </span>@Model.Category
+                </li>
+                <li class="mb-1">
+                    <span class="fw-bold">Price: </span>@Model.Price Euro
+                </li>
+                <li class="mb-1">
+                    <span class="fw-bold">Seller: </span>@Model.Seller
+                </li>
+                <li class="mb-1">
+                    <span class="fw-bold">Quantity: </span>@Model.Quantity
+                </li>
+                <li class="mb-1">
+                    <span class="fw-bold">Rating: </span>@Model.Rating
+                </li>
+            </ul>
+        </article>
+
+        @if (User.Identity.Name == Model.Seller)
+        {
+            <a asp-controller="Product" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-outline-dark mb-2 w-100 fw-bold">Edit</a>
+            <a asp-controller="Product" asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-outline-danger mb-3 w-100 fw-bold">Delete</a>
+        }
+        else
+        {
+            <a asp-controller="Cart" asp-action="AddToCart" asp-route-id="@Model.Id" class="btn btn-outline-success mb-3 w-100 fw-bold">Add to Cart</a>
+            <a asp-controller="Product" asp-action="Details" asp-route-id="@Model.Id" class="btn btn-outline-success mb-3 w-100  fw-bold">Details</a>
+        }
+    </div>
+</div>
+ *@
+<div class="col-md-4">
+    <div class="card mb-3 product-card">
+
+        <article class="card-body text-center">
+            <h5 class="card-title mt-3">@Model.Name</h5>
+
+            <img class="card-img-top mx-auto d-block product-image" src="@Model.Image" alt="Image of @Model.Name">
+
+            <ul class="list-unstyled mt-3 product-details">
+                <li class="mb-1">
+                    <span class="fw-bold">Added on: </span>@Model.CreatedOn
+                </li>
+                <li class="mb-1">
+                    <span class="fw-bold">Category: </span>@Model.Category
+                </li>
+                <li class="mb-1">
+                    <span class="fw-bold">Price: </span>@Model.Price Euro
+                </li>
+                <li class="mb-1">
+                    <span class="fw-bold">Seller: </span>@Model.Seller
+                </li>
+                <li class="mb-1">
+                    <span class="fw-bold">Quantity: </span>@Model.Quantity
+                </li>
+                <li class="mb-1">
+                    <span class="fw-bold">Rating: </span>@Model.Rating
+                </li>
+            </ul>
+        </article>
+
+        <div class="card-footer text-center">
+            @if (User.Identity.Name == Model.Seller)
+            {
+                <a asp-controller="Product" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-outline-dark mb-2 w-100 fw-bold">Edit</a>
+                <a asp-controller="Product" asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-outline-danger mb-3 w-100 fw-bold">Delete</a>
+            }
+            else
+            {
+                <a asp-controller="Cart" asp-action="AddToCart" asp-route-id="@Model.Id" class="btn btn-outline-success mb-2 w-100 fw-bold">Add to Cart</a>
+                <a asp-controller="Product" asp-action="Details" asp-route-id="@Model.Id" class="btn btn-outline-primary mb-3 w-100 fw-bold">Details</a>
+            }
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Card Styles */
+    .product-card {
+        width: 15rem;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+        border-radius: 10px;
+        transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+        }
+
+    /* Image Styling */
+    .product-image {
+        width: 128px;
+        height: 128px;
+        border-radius: 50%;
+        border: 2px solid #343a40;
+        object-fit: cover;
+    }
+
+    /* Product Details */
+    .product-details li {
+        font-size: 0.95rem;
+        color: #6c757d;
+    }
+
+        .product-details li span.fw-bold {
+            color: #343a40;
+        }
+
+    /* Button Styling */
+    .btn {
+        font-size: 0.95rem;
+        border-radius: 5px;
+    }
+
+    .btn-outline-success {
+        border-color: #28a745;
+        color: #28a745;
+    }
+
+    .btn-outline-danger {
+        border-color: #dc3545;
+        color: #dc3545;
+    }
+
+    .btn-outline-primary {
+        border-color: #007bff;
+        color: #007bff;
+    }
+
+    .btn-outline-dark {
+        border-color: #343a40;
+        color: #343a40;
+    }
+
+    /* Card Footer */
+    .card-footer {
+        background-color: #f8f9fa;
+        border-top: 1px solid #e9ecef;
+        padding-top: 10px;
+    }
+</style>
+>>>>>>> 34b9d79 (Style the AllProduct View)
