@@ -17,15 +17,15 @@
 
 @if (Model.Any())
 {
-    <div>
-        <table class="table table-bordered">
-            <thead>
+    <div class="order-table-container">
+        <table class="table table-bordered table-hover table-responsive-sm">
+            <thead class="table-header">
                 <tr>
                     <th>Seller Email</th>
                     <th>Product Name</th>
                     <th>Date</th>
-                    <th>Shiping Address</th>
-                    <th>Order Details</th>
+                    <th>Shipping Address</th>
+                    <th>Order Actions</th>
                 </tr>
             </thead>
             <tbody>
@@ -38,13 +38,13 @@
                         <td>@item.ProductName</td>
                         <td>@item.Date</td>
                         <td>@item.Address</td>
-                        <td style="display:flex;justify-content:space-between">
-                            <form asp-controller="Order" asp-action="Details" asp-route-id="@item.Id"style="padding-left:20px">
-                                <input type="submit" value="Details" class="btn btn-danger btn-sm" />
+                        <td class="order-actions">
+                            <form asp-controller="Order" asp-action="Details" asp-route-id="@item.Id" class="action-form">
+                                <input type="submit" value="Details" class="btn btn-info btn-sm" />
                             </form>
-                            <form asp-controller="Order" asp-action="Delete" asp-route-id="@item.Id" style="padding-right:20px;">
+                            <form asp-controller="Order" asp-action="Delete" asp-route-id="@item.Id" class="action-form">
                                 <input type="submit" value="Delete" class="btn btn-danger btn-sm" />
-                            </form> 
+                            </form>
                         </td>
                     </tr>
                 }
@@ -54,10 +54,88 @@
 }
 @if (!Model.Any())
 {
-    <div class="text-center">
+    <div class="text-center no-orders">
         <h3>No Orders Found</h3>
     </div>
 }
 
+<style>
+    /* Table Container */
+    .order-table-container {
+        margin: 20px auto;
+        width: 100%;
+        max-width: 1000px;
+        overflow-x: auto;
+    }
+
+    /* Table Styling */
+    .table {
+        border-collapse: collapse;
+        width: 100%;
+        text-align: left;
+        margin-bottom: 20px;
+    }
+
+    .table-bordered {
+        border: 1px solid #dee2e6;
+    }
+
+    .table-hover tbody tr:hover {
+        background-color: #f8f9fa;
+    }
+
+    /* Table Header */
+    .table-header {
+        background-color: #343a40;
+        color: #fff;
+        font-weight: bold;
+    }
+
+    /* Table Cells */
+    .table td, .table th {
+        padding: 12px;
+        vertical-align: middle;
+        text-align: center;
+    }
+
+    /* Order Actions Column */
+    .order-actions {
+        display: flex;
+        justify-content: space-evenly;
+    }
+
+    /* Action Form */
+    .action-form {
+        display: inline-block;
+        margin: 0 5px;
+    }
+
+    /* Buttons */
+    .btn-sm {
+        font-size: 0.875rem;
+        padding: 5px 10px;
+    }
+
+    .btn-info {
+        background-color: #17a2b8;
+        border-color: #17a2b8;
+    }
+
+    .btn-danger {
+        background-color: #dc3545;
+        border-color: #dc3545;
+    }
+
+    /* No Orders Found Message */
+    .no-orders {
+        margin: 40px 0;
+    }
+
+        .no-orders h3 {
+            font-size: 1.5rem;
+            color: #6c757d;
+        }
+
+</style>
 
 
