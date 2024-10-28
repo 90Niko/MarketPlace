@@ -6,13 +6,13 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] -Best MarketPlace</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" /> 
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/MarketPlace.styles.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/css/UserArea/Mine/Mine.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/UserArea/Mine/Mine.css" asp-append-version="true" /> 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+   @*  <link rel="icon" type="image/x-icon" href="assets/favicon.ico" /> *@
 
-    <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
-    
 </head>
 <body style="background-color:powderblue; margin:0 auto;">
     <header style="background-color:#f8f9fa;">
@@ -28,25 +28,25 @@
                         @if (this.User?.Identity?.IsAuthenticated ?? false)
                         {
                             <li class="nav-item">
-                                <a class="nav-link" asp-area="" asp-controller="Product" asp-action="Mine">My Products</a>
+                                <a class="nav-link" asp-area="" asp-controller="Product" asp-action="Mine" style="color:black">My Products</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" asp-area="" asp-controller="Product" asp-action="Add">Add Product</a>
+                                <a class="nav-link" asp-area="" asp-controller="Product" asp-action="Add" style="color:black">Add Product</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" asp-area="" asp-controller="Cart" asp-action="AddAddress">Shipping Address</a>
+                                <a class="nav-link" asp-area="" asp-controller="Cart" asp-action="AddAddress" style="color:black">Shipping Address</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" asp-area="" asp-controller="Order" asp-action="OrderInfo">Order Info</a>
+                                <a class="nav-link" asp-area="" asp-controller="Order" asp-action="OrderInfo" style="color:black">Order Info</a>
                             </li>
                         }
                         <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Product" asp-action="All">All Products</a>
+                            <a class="nav-link" asp-area="" asp-controller="Product" asp-action="All" style="color:black">All Products</a>
                         </li>
                         @if (User?.IsInRole("Administrator") ?? false)
                         {
                             <li class="nav-item">
-                                <a class="nav-link" asp-area="Admin" asp-controller="Home" asp-action="Dashboard">Admin Area</a>
+                                <a class="nav-link" asp-area="Admin" asp-controller="Home" asp-action="Dashboard" style="color:red">Admin Area</a>
                             </li>
                         }
                     </ul>
@@ -79,39 +79,35 @@
 </html>
 
 <style>
-    /* Navbar Styles */
+
     .navbar {
-        padding: 10px 20px; /* Add padding for a more spacious look */
-        margin-bottom: 20px; /* Add space between navbar and content */
+        padding: 10px 20px;
+        margin-bottom: 20px;
     }
 
     .navbar-brand {
-        font-size: 1.8rem; /* Larger brand font for emphasis */
-        font-weight: bold; /* Bold brand name */
+      
+        font-weight: bold;
     }
 
-    .navbar-nav .nav-item {
-        margin: 0 10px; /* Add spacing between nav items */
+
+
+    .my-products-link:hover {
+        color: #007bff;
+        text-shadow: 0px 0px 3px rgba(0, 123, 255, 0.5);
     }
 
     .navbar-nav .nav-link {
-        color: white; /* Default text color white for better contrast */
-        font-size: 1.1rem; /* Slightly larger font size */
-        padding: 10px 15px; /* Padding for clickable area */
-        border-radius: 5px; /* Rounded corners */
-        transition: background-color 0.3s ease, color 0.3s ease; /* Smooth transitions */
+        font-size: 1.1rem;
+        padding: 10px 15px;
+        transition: color 0.3s ease, text-shadow 0.3s ease;
     }
 
-    /* Hover effect for links */
-    .navbar-nav .nav-link:hover {
-        color: white; /* Change text color on hover */
-        background-color: rgba(255, 255, 255, 0.2); /* Subtle background change */
+
+    .navbar-nav:hover .nav-link:hover {
+        transform: scale(1.1);
+        color: white !important;
     }
 
-    /* Active link styles */
-    .navbar-nav .nav-link.active {
-        background-color: rgba(255, 255, 255, 0.3); /* Highlight active link */
-        color: white; /* Ensure active link text is white */
-    }
 
 </style>
