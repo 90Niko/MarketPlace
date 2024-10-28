@@ -10,9 +10,9 @@
 
     if (SignInManager.IsSignedIn(User))
     {
-        var user=await UserManager.FindByIdAsync(User.Id());
+        var user = await UserManager.FindByIdAsync(User.Id());
 
-        userName=$"{user.FirstName} {user.LastName}";
+        userName = $"{user.FirstName} {user.LastName}";
     }
 }
 
@@ -20,19 +20,18 @@
     @if (SignInManager.IsSignedIn(User))
     {
         <form class="d-flex">
-            <button class="btn btn-outline-dark" asp-area="" asp-controller="Cart" asp-action="Cart" type="submit">
-                <i class="bi-cart-fill me-1"></i>
+            <button class="btn" asp-area="" asp-controller="Cart" asp-action="Cart" type="submit">
                 Cart
-                <span class="badge bg-dark text-white ms-1 rounded-pill"></span>
+                <i class="fas fa-shopping-cart"></i>
             </button>
         </form>
         <li class="nav-item">
-            <a class="btn btn-outline-dark mt-auto" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @userName! </a>
+            <a class="btn" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @userName! </a>
 
         </li>
 
         <form class="text-center" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-            <button class="btn btn-outline-dark mt-auto" type="submit">
+            <button class="btn" type="submit">
                 Log out
             </button>
         </form>
@@ -47,3 +46,22 @@
         </li>
     }
 </ul>
+
+<style>
+    .btn{
+       font-size:1.1rem;
+    }
+    /* Button hover effect */
+    .btn:hover {
+            color: #ffffff; /* White text on hover */
+            /* transform: scale(1.1); */
+            transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+        /* Optional: Cart icon hover scaling effect */
+        .btn:hover .fa-shopping-cart {
+            transform: scale(1.1); /* Slightly enlarge icon */
+            transition: transform 0.3s ease;
+        }
+
+</style>
