@@ -19,6 +19,7 @@
             <img class="card-img-top" src="@a.ImageUrl" alt="Product Image">
             <div class="card-body">
                 <p><span class="fw-bold">Name: </span>@a.Name</p>
+                <p><span class="fw-bold">Created: </span>@a.CreatedOn</p>
                 <a asp-controller="Home" asp-action="ForReview" asp-route-id="@a.Id" class="btn btn-primary">For Review</a>
             </div>
         </div>
